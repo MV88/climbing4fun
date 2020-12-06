@@ -1,24 +1,19 @@
 <template>
   <div class="container">
     <div>
-      <Logo />
-      <h1 class="title">
-        climbing4fun
-      </h1>
-      <div class="links">
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+      <h1 class="title">Climbing 4 Fun</h1>
+      <Carousel />
+      <p>Checkout the routes here</p>
+      <Table />
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  name: "Home",
+  data() {
+    return {};
+  },
+};
 </script>
