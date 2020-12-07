@@ -6,14 +6,14 @@
     </div>
     <b-container class="start">
       <b-row>
-        <NuxtLink :to="galleries[0].to" tag="no" class="card-link">
+        <NuxtLink :to="galleries[0].to" tag="div" class="card-link">
           <b-card tag="article" title="Gita a Vecchiano">
             <img :width="size" :height="size" :src="img_url" />
 
             <b-card-text> Terza tappa stagionale 2020 </b-card-text>
           </b-card>
         </NuxtLink>
-        <NuxtLink :to="galleries[1].to" tag="no" class="card-link">
+        <NuxtLink :to="galleries[1].to" tag="div" class="card-link">
           <b-card :title="defaults.title" tag="article">
             <img :width="size" :height="size" :src="img_url" />
             <b-card-text>
@@ -22,7 +22,7 @@
           </b-card>
         </NuxtLink>
 
-        <NuxtLink :to="galleries[2].to" tag="no" class="card-link">
+        <NuxtLink :to="galleries[2].to" tag="div" class="card-link">
           <b-card :title="defaults.title" tag="article">
             <img :width="size" :height="size" :src="img_url" />
             <b-card-text>
@@ -31,7 +31,7 @@
           </b-card>
         </NuxtLink>
 
-        <NuxtLink to="/gallery/trip" tag="no" class="card-link">
+        <NuxtLink to="/gallery/trip" tag="div" class="card-link">
           <b-card :title="defaults.title" tag="article">
             <img :width="size" :height="size" :src="img_url" />
             <b-card-text>
@@ -39,7 +39,7 @@
             </b-card-text>
           </b-card>
         </NuxtLink>
-        <NuxtLink to="/gallery/trip" tag="no" class="card-link">
+        <NuxtLink to="/gallery/trip" tag="div" class="card-link">
           <b-card :title="defaults.title" tag="article">
             <img :width="size" :height="size" :src="img_url" />
             <b-card-text>
@@ -47,7 +47,7 @@
             </b-card-text>
           </b-card>
         </NuxtLink>
-        <NuxtLink to="/gallery/trip" tag="no" class="card-link">
+        <NuxtLink to="/gallery/trip" tag="div" class="card-link">
           <b-card :title="defaults.title" tag="article">
             <img :width="size" :height="size" :src="img_url" />
             <b-card-text>
@@ -55,7 +55,7 @@
             </b-card-text>
           </b-card>
         </NuxtLink>
-        <NuxtLink to="/gallery/trip" tag="no" class="card-link">
+        <NuxtLink to="/gallery/trip" tag="div" class="card-link">
           <b-card :title="defaults.title" tag="article">
             <img :width="size" :height="size" :src="img_url" />
             <b-card-text>
