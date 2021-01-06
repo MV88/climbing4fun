@@ -1,29 +1,19 @@
 <template>
   <div>
     <Header />
-    <div class="centered">
+    <div class="ta-c">
       <h3 class="title">{{ this.$route.params.trip }}</h3>
     </div>
     <b-container class="start">
-      <b-row>
-        <b-card tag="none" title="Gita a Vecchiano">
+      <b-row class="jc-c">
+        <b-card tag="article" class="picture-card">
           <img :width="size" :height="size" :src="img_url" />
-
-          <b-card-text> Terza tappa stagionale 2020 </b-card-text>
         </b-card>
-
-        <b-card :title="defaults.title" tag="article">
+        <b-card tag="article" class="picture-card">
           <img :width="size" :height="size" :src="img_url" />
-          <b-card-text>
-            {{ defaults.subTitle }}
-          </b-card-text>
         </b-card>
-
-        <b-card :title="defaults.title" tag="article">
+        <b-card tag="article" class="picture-card">
           <img :width="size" :height="size" :src="img_url" />
-          <b-card-text>
-            {{ defaults.subTitle }}
-          </b-card-text>
         </b-card>
       </b-row>
     </b-container>
@@ -32,7 +22,6 @@
 
 <script>
 import { routes, ropes } from "../../../static/resources";
-
 export default {
   name: "Trip",
   props: {
@@ -53,4 +42,13 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="less">
+.card.picture-card {
+  border: none;
+  width: unset;
+  padding: 0;
+}
+.card.picture-card .card-body {
+  margin: 0;
+}
+</style>

@@ -16,7 +16,6 @@
     "titleBar.inactiveForeground": "#e7e7e799"
   },
   "peacock.color": "#926c87",
-  "editor.formatOnSave": true,
   "vetur.validation.template": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true

@@ -42,7 +42,7 @@ export default {
 
 <style>
 .carousel-container {
-  width: 1024px;
-  height: 480px;
+  max-width: 1024px;
+  width: 100%;
 }
 </style>

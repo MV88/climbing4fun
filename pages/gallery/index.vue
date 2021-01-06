@@ -1,11 +1,11 @@
 <template>
   <div>
     <Header />
-    <div class="centered">
+    <div class="ta-c">
       <h3 class="title">Photo Gallery</h3>
     </div>
     <b-container class="start">
-      <b-row>
+      <b-row class="jc-c">
         <NuxtLink :to="galleries[0].to" tag="div" class="card-link">
           <b-card tag="article" title="Gita a Vecchiano">
             <img :width="size" :height="size" :src="img_url" />
@@ -55,16 +55,13 @@
             </b-card-text>
           </b-card>
         </NuxtLink>
-        <NuxtLink to="/gallery/trip" tag="div" class="card-link">
-          <b-card :title="defaults.title" tag="article">
-            <img :width="size" :height="size" :src="img_url" />
-            <b-card-text>
-              {{ defaults.subTitle }}
-            </b-card-text>
-          </b-card>
-        </NuxtLink>
       </b-row>
     </b-container>
+
+    <b-button pill class="floating btn-circle" @click="addGallery"
+      ><b-icon icon="plus" style="width: 40px; height: 40px"
+    /></b-button>
+    <AddGalleryForm />
   </div>
 </template>
 
@@ -107,24 +104,33 @@ export default {
       }));
     },
   },
+  methods: {
+    addGallery() {
+      this.$bvModal.show("addGalleryForm");
+
+      // this.$store.commit("showAddGalleryForm", true);
+    },
+  },
 };
 </script>
 
 <style>
-.centered {
-  justify-content: center;
-  align-items: center;
+.ta-c {
   text-align: center;
+}
+.jc-c {
+  justify-content: center;
 }
 .title {
   margin-top: 8px;
 }
 .start.container {
   align-items: flex-start;
+  justify-content: flex-start;
 }
 .card {
   width: 300px;
-  margin: 8px;
+  margin: 16px;
   border: 1px solid grey;
 }
 img {
@@ -134,9 +140,22 @@ img {
 .card:hover {
   border-color: rgb(39, 133, 216);
   cursor: pointer;
-  transform: scale(1.05);
+  transform: scale(1.1);
 }
 .card-link + .card-link {
   margin-left: 0;
+}
+.floating {
+  position: fixed;
+  bottom: 100px;
+  right: 100px;
+}
+.btn-circle.btn {
+  width: 50px;
+  height: 50px;
+  padding: 0px;
+  border-radius: 25px;
+  font-size: 10px;
+  text-align: center;
 }
 </style>

@@ -40,11 +40,11 @@ const ropes = [
     id: 1,
     name: "beal",
     color: "orange",
-    bought_date: "10/06/2020",
+    purchaseDate: "10/06/2020",
     shopLink: "",
-    length_m: 80,
-    thickness_mm: 9.8,
-    img_url:
+    "length (m)": 80,
+    "thickness (mm)": 9.8,
+    thumbnail:
       "https://media.oliunid.it/media/catalog/product/cache/a0878e296847b1aa8832f2fdabad9b1b/b/e/beal_booster_9.7_mm_golden_dry_unicore_fuxia_1_1.jpg",
   },
 ];

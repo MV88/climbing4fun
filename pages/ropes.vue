@@ -1,13 +1,23 @@
 <template>
-  <div>
+  <span>
     <Header />
-    <h3>Ropes</h3>
-    <b-table striped hover :items="ropes">
-      <template #cell(img_url)="data">
-        <img height="100" :src="data.value" />
-      </template>
-    </b-table>
-  </div>
+    <b-container class="start">
+      <div class="table-root">
+        <h3>Ropes</h3>
+        <div class="table-container">
+          <b-table striped hover :items="ropes" :fields="fields">
+            <template #cell(thumbnail)="data">
+              <img height="100" :src="data.value" />
+            </template>
+          </b-table>
+          <b-button pill class="floating btn-circle" @click="addRope"
+            ><b-icon icon="plus" style="width: 40px; height: 40px"
+          /></b-button>
+          <AddRopeForm />
+        </div>
+      </div>
+    </b-container>
+  </span>
 </template>
 
 <script>
@@ -18,8 +28,29 @@ export default {
   data() {
     return {
       items: routes,
+      fields: [
+        "name",
+        "thumbnail",
+        "color",
+        "purchaseDate",
+        "length (m)",
+        "thickness (mm)",
+        "shopLink",
+      ],
       ropes,
     };
   },
+  methods: {
+    addRope() {
+      this.$bvModal.show("addRopeForm");
+    },
+  },
 };
 </script>
+
+<style>
+.start.container {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+</style>

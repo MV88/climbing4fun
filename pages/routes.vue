@@ -1,8 +1,10 @@
 <template>
-  <div>
+  <span>
     <Header />
-    <h3>Routes</h3>
-  </div>
+    <div class="jc-c ta-c">
+      <h3>Routes</h3>
+    </div>
+  </span>
 </template>
 
 <script>
