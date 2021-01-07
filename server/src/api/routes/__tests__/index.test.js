@@ -1,11 +1,12 @@
-const supertest = require('supertest');
-const app = require('../app');
-const { API } = require('../src/constants/project');
+const supertest = require("supertest");
 
-describe("App", () => {
+const app = require('../../../../app');
+const { API } = require('../../../constants/project');
+
+describe("GET /api/v1", () => {
   it("should respond with a message", async () => {
     const response = await supertest(app)
-      .get("/")
+      .get("/api/v1")
       .expect("Content-Type", /json/)
       .expect(200);
     expect(response.body.message).toEqual(API);

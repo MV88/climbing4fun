@@ -25,13 +25,15 @@ exports.seed = async (knex) => {
     .insert([user])
     .returning("*");
 
-  console.log(
-    "user created: ",
-    {
-      password,
-    },
-    createdUser,
-  );
+  if (process.env.NODE_ENV !== "test") {
+    console.log(
+      "user created: ",
+      {
+        password,
+      },
+      createdUser,
+    );
+  }
 
   await knex(tableNames.style).insert(
     styles,

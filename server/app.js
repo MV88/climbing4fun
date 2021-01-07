@@ -4,6 +4,8 @@ const compression = require("compression");
 const helmet = require("helmet");
 const notFound = require("./src/api/middlewares/notFound");
 const errorHandler = require("./src/api/middlewares/errorHandler");
+const routes = require('./src/api/routes');
+const { API } = require('./src/constants/project');
 
 const app = express();
 
@@ -14,10 +16,11 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.json({
-    message: "Climbing for fun",
+    message: API,
   });
 });
 
+app.use("/api/v1", routes);
 app.use(notFound);
 app.use(errorHandler);
 
