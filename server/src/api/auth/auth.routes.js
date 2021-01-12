@@ -1,7 +1,7 @@
 const express = require("express");
 const yup = require("yup");
-const AuthUtils = require('../utils/AuthUtils');
-const User = require('../models/user');
+const AuthUtils = require('../../utils/AuthUtils');
+const User = require('../users/users.model');
 const router = express.Router();
 
 const userSchema = yup.object().shape({

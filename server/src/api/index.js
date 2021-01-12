@@ -1,9 +1,9 @@
 const express = require("express");
-const { API } = require('../../constants/project');
-const styles = require('./styles');
-const auth = require('./auth');
-const users = require('./users');
-const ropes = require('./ropes');
+const { API } = require('../constants/project');
+const styles = require('./styles/styles.routes');
+const auth = require('./auth/auth.routes');
+const users = require('./users/users.routes');
+const ropes = require('./ropes/ropes.routes');
 
 const router = express.Router();
 router.get("/", (req, res) => {

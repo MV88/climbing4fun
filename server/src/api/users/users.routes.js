@@ -1,11 +1,6 @@
 const express = require("express");
-const User = require('../models/user');
+const User = require('./users.model');
 const router = express.Router();
-
-/* const {
-  find
-} = require('../queries/user');
-*/
 
 router.get("/", async (req, res) => {
   const users = await User

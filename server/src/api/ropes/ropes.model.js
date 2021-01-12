@@ -1,22 +1,24 @@
 const { Model } = require('objection');
 const tableNames = require('../../constants/tableNames');
 
-class User extends Model {
+class Rope extends Model {
   static get tableName () {
-    return tableNames.user;
+    return tableNames.rope;
   }
 
   static get jsonschema () {
     return {
       $schema: "http://json-schema.org/draft-07/schema",
       type: "object",
-      title: "The User schema",
-      description: "The user.",
+      title: "The Rope schema",
+      description: "The Rope.",
       required: [
-        "email",
+        "ownerId",
         "name",
-        "surname",
-        "password",
+        "color",
+        "length",
+        "thickness",
+        "purchaseDate",
       ],
       properties: {
         id: {
@@ -24,10 +26,10 @@ class User extends Model {
           type: "integer",
           title: "The ID",
         },
-        email: {
-          $id: "#/properties/email",
+        ownerId: {
+          $id: "#/properties/ownerId",
           type: "string",
-          title: "The email of the user, must be unique",
+          title: "The id of the user that is the owner",
           examples: [
             "chronosoutoftime@gmail.com",
           ],
@@ -35,7 +37,7 @@ class User extends Model {
         name: {
           $id: "#/properties/name",
           type: "string",
-          title: "The name of the user",
+          title: "The name of the Rope",
           examples: [
             "Chronos",
           ],
@@ -43,17 +45,17 @@ class User extends Model {
         surname: {
           $id: "#/properties/surname",
           type: "string",
-          title: "The surname of the user",
+          title: "The surname of the Rope",
         },
         password: {
           $id: "#/properties/name",
           type: "string",
-          title: "The password of the user",
+          title: "The password of the Rope",
         },
         created_at: {
           $id: "#/properties/created_at",
           type: "string",
-          title: "The date of creation of the user",
+          title: "The date of creation of the Rope",
           examples: [
             "2021-01-07T22:48:30.656Z",
           ],
@@ -61,7 +63,7 @@ class User extends Model {
         updated_at: {
           $id: "#/properties/updated_at",
           type: "string",
-          title: "The date of the update of the user",
+          title: "The date of the update of the Rope",
           examples: [
             "2021-01-07T22:48:30.656Z",
           ],
@@ -71,4 +73,4 @@ class User extends Model {
     };
   }
 }
-module.exports = User;
+module.exports = Rope;

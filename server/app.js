@@ -2,9 +2,9 @@ const express = require("express");
 const morgan = require("morgan");
 const compression = require("compression");
 const helmet = require("helmet");
-const notFound = require("./src/api/middlewares/notFound");
-const errorHandler = require("./src/api/middlewares/errorHandler");
-const routes = require('./src/api/routes');
+const notFound = require("./src/middlewares/notFound");
+const errorHandler = require("./src/middlewares/errorHandler");
+const routes = require('./src/api');
 const { API } = require('./src/constants/project');
 
 const app = express();
