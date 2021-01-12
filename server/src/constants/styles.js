@@ -8,6 +8,7 @@ const csvData = fs
       __dirname,
       '..',
       '..',
+      'src',
       'db',
       'sources',
       'styles.csv',

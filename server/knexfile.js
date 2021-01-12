@@ -12,14 +12,14 @@ module.exports = {
       password: process.env.POSTGRES_PASSWORD,
     },
     migrations: {
-      directory: `./db/migrations`,
+      directory: `./src/db/migrations`,
     },
     seeds: {
-      directory: `./db/seeds`,
+      directory: `./src/db/seeds`,
     },
   },
   test: {
-    debug: false,
+    debug: true,
     client: "pg",
     connection: {
       database: process.env.POSTGRES_DB_TEST,
@@ -27,10 +27,10 @@ module.exports = {
       password: process.env.POSTGRES_PASSWORD,
     },
     migrations: {
-      directory: `./db/migrations`,
+      directory: `./src/db/migrations`,
     },
     seeds: {
-      directory: `./db/seeds`,
+      directory: `./src/db/seeds`,
     },
   },
 };

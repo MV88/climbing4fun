@@ -8,7 +8,7 @@ const {
   ropesPatchById,
   ropesDeleteById,
   ropesPost,
-} = require('../controllers/ropes');
+} = require('../queries/ropes');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

@@ -1,13 +1,13 @@
 // eslint-disable-next-line no-unused-vars
 const Knex = require("knex");
 
-const tableNames = require("../../src/constants/tableNames");
+const tableNames = require("../../../src/constants/tableNames");
 const {
   addDefaultColumns,
   url,
   email,
   references,
-} = require("../../src/lib/tableUtils");
+} = require("../../../src/lib/tableUtils");
 
 /**
  * @param {Knex} knex

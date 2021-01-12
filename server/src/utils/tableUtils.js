@@ -2,8 +2,8 @@
 const Knex = require("knex");
 
 const addDefaultColumns = (table) => {
-  table.timestamps(false, true);
-  table.datetime("deleted at");
+  table.timestamps(false, true); // created_at updated_at
+  table.datetime("deleted_at");
 };
 
 /**
