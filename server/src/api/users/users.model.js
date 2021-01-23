@@ -14,8 +14,6 @@ class User extends Model {
       description: "The user.",
       required: [
         "email",
-        "name",
-        "surname",
         "password",
       ],
       properties: {
@@ -32,18 +30,26 @@ class User extends Model {
             "chronosoutoftime@gmail.com",
           ],
         },
+        username: {
+          $id: "#/properties/username",
+          type: "string",
+          title: "The username of the user",
+          examples: [
+            "Chronos",
+          ],
+        },
         name: {
           $id: "#/properties/name",
           type: "string",
           title: "The name of the user",
           examples: [
-            "Chronos",
+            "Matteo",
           ],
         },
-        surname: {
-          $id: "#/properties/surname",
+        refreshToken: {
+          $id: "#/properties/refreshToken",
           type: "string",
-          title: "The surname of the user",
+          title: "The refreshToken of the user",
         },
         password: {
           $id: "#/properties/name",

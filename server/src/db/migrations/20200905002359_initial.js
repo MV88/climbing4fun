@@ -2,12 +2,8 @@
 const Knex = require("knex");
 
 const tableNames = require("../../../src/constants/tableNames");
-const {
-  addDefaultColumns,
-  url,
-  email,
-  references,
-} = require("../../../src/lib/tableUtils");
+
+const { addDefaultColumns, email, references, url } = require('../../utils/tableUtils');
 
 /**
  * @param {Knex} knex
@@ -17,8 +13,9 @@ exports.up = async (knex) => {
     knex.schema.createTable(tableNames.user, (table) => {
       table.increments().notNullable();
       email(table, "email").notNullable().unique();
-      table.string("name").notNullable();
-      table.string("surname").notNullable();
+      table.string("username").notNullable().unique();
+      table.string("name");
+      table.string("refreshToken");
       table.string("password", 127).notNullable();
       table.datetime("last_login");
       addDefaultColumns(table);
@@ -75,9 +72,10 @@ exports.up = async (knex) => {
     table.string("color").notNullable();
     table.float("length").notNullable();
     table.float("thickness").notNullable();
+    table.string("owner").unique().notNullable();
     table.datetime("purchaseDate").notNullable();
     table.string("shopLink").notNullable();
-    references(table, tableNames.user, true, "owner");
+    references(table, tableNames.user, false, "owner");
     references(table, tableNames.media, true, "thumbnail");
     addDefaultColumns(table);
   });

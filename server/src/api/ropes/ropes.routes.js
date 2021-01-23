@@ -1,5 +1,6 @@
 const express = require("express");
-// const Rope = require('./ropes.model');
+// const { checkAuth } = require('../auth/auth.utils');
+const Rope = require('./ropes.model');
 
 const router = express.Router();
 
@@ -29,11 +30,36 @@ const upload = multer({
   limits: { fileSize: 1024 * 1024 * 5 },
   fileFilter,
 });
-
-router.get("/", ropesGet);
-router.get("/:ropeId", ropesGetById);
+*/
+router.get("/", async (req, res, next) => {
+  try {
+    const ropes = await Rope.query();
+    res.status(200).json({ ropes });
+  } catch (e) {
+    next(e);
+  }
+});
+router.get("/:ropeId", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const ropes = await Rope.query().select({ id });
+    res.status(200).json({ ropes });
+  } catch (e) {
+    next(e);
+  }
+});
+// TODO manage uploads
+// TODO test check Auth
+router.post("/", /* checkAuth, /* upload.single("ropeImage"), */ async (req, res, next) => {
+  try {
+    const rope = await Rope.query().insert(req.body);
+    res.status(200).json({ rope, message: "Rope inserted correctly" });
+  } catch (e) {
+    next(e);
+  }
+});
+/*
 router.patch("/:ropeId", checkAuth, ropesPatchById);
 router.delete("/:ropeId", checkAuth, ropesDeleteById);
-router.post("/", checkAuth, upload.single("ropeImage"), ropesPost);
 */
 module.exports = router;

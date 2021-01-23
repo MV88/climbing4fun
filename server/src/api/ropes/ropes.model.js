@@ -14,11 +14,10 @@ class Rope extends Model {
       description: "The Rope.",
       required: [
         "ownerId",
-        "name",
+        "brand",
         "color",
         "length",
         "thickness",
-        "purchaseDate",
       ],
       properties: {
         id: {
@@ -30,27 +29,50 @@ class Rope extends Model {
           $id: "#/properties/ownerId",
           type: "string",
           title: "The id of the user that is the owner",
+        },
+        brand: {
+          $id: "#/properties/brand",
+          type: "string",
+          title: "The brand of the Rope",
           examples: [
-            "chronosoutoftime@gmail.com",
+            "Beal",
           ],
         },
-        name: {
-          $id: "#/properties/name",
+        color: {
+          $id: "#/properties/color",
           type: "string",
-          title: "The name of the Rope",
+          title: "The color of the Rope",
           examples: [
-            "Chronos",
+            "Orange",
           ],
         },
-        surname: {
-          $id: "#/properties/surname",
+        purchaseDate: {
+          $id: "#/properties/purchaseDate",
           type: "string",
-          title: "The surname of the Rope",
+          title: "The date of purchase of the Rope",
+          examples: [
+            "10/09/2020",
+          ],
         },
-        password: {
-          $id: "#/properties/name",
+        length: {
+          $id: "#/properties/length",
+          type: "number",
+          title: "The length of the Rope in meters",
+        },
+        thickness: {
+          $id: "#/properties/thickness",
+          type: "number",
+          title: "The thickness of the Rope in millimeters",
+        },
+        shopLink: {
+          $id: "#/properties/shopLink",
           type: "string",
-          title: "The password of the Rope",
+          title: "The link where the Rope has been bought",
+        },
+        owner: {
+          $id: "#/properties/owner",
+          type: "string",
+          title: "The name surname, whatever, related to owner",
         },
         created_at: {
           $id: "#/properties/created_at",

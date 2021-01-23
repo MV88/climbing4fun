@@ -1,20 +1,55 @@
 const express = require("express");
+const uuidv4 = require('uuid/v4');
 const yup = require("yup");
-const AuthUtils = require('../../utils/AuthUtils');
+const pick = require("lodash/pick");
+
 const User = require('../users/users.model');
+const AuthUtils = require('./auth.utils');
 const router = express.Router();
 
-const userSchema = yup.object().shape({
+const getUserData = user => pick(user, ["id", "name", "username", "email"]);
+
+const userSchemaSignup = yup.object().shape({
   name: yup
     .string()
     .trim()
-    .min(2)
-    .required(),
-  surname: yup
+    .min(2),
+  username: yup
     .string()
     .trim()
     .min(2)
     .required(),
+  refreshToken: yup
+    .string()
+    .trim(),
+  email: yup
+    .string()
+    .trim()
+    .email()
+    .required(),
+  password: yup
+    .string()
+    .min(8, "password must be at least 8 characters")
+    .max(100)
+    .matches(/[^a-zA-Z0-9]/, "password must contain a special character")
+    .matches(/[a-z]/, "password must contain an upper case letter")
+    .matches(/[A-Z]/, "password must contain a lower case letter")
+    .matches(/[0-9]/, "password must contain a number")
+    .required(),
+});
+
+const userSchemaSignin = yup.object().shape({
+  name: yup
+    .string()
+    .trim()
+    .min(2),
+  username: yup
+    .string()
+    .trim()
+    .min(2),
+  refreshToken: yup
+    .string()
+    .trim(),
   email: yup
     .string()
     .trim()
@@ -33,9 +68,10 @@ const userSchema = yup.object().shape({
 
 router.post("/signup", async (req, res, next) => {
   try {
-    const { email, name, password, surname } = req.body;
-    const newUser = { email, name, password, surname };
-    await userSchema.validate(newUser, { abortEarly: false });
+    const { name, password, username } = req.body;
+    const email = req.body.email.toLowerCase();
+    const newUser = { email, name, password, username };
+    await userSchemaSignup.validate(newUser, { abortEarly: false });
     const existingUser = await User.query().where({ email }).first();
     if (existingUser) {
       const error = new Error("Email already in use");
@@ -43,55 +79,92 @@ router.post("/signup", async (req, res, next) => {
       throw error;
     }
     const hashedPassword = await AuthUtils.hashPassword(password);
-    const insertedUser = await User.query().insert({ name, surname, email, password: hashedPassword });
-    delete insertedUser.password;
-    const payload = {
-      email,
-      id: insertedUser.id,
-      name,
-      surname,
-    };
-    const token = await AuthUtils.sign(payload);
+    const refreshToken = uuidv4();
+    const insertedUser = await User.query().insert({ name, username, refreshToken, email, password: hashedPassword });
+    const accessToken = await AuthUtils.sign(insertedUser);
+
+    res.cookie('refreshToken', refreshToken, {
+      maxAge: AuthUtils.REFRESH_TOKEN_EXPIRES * 60 * 1000, // 30d convert from minute to milliseconds
+      httpOnly: true,
+      secure: false,
+    });
     res.json({
-      message: "ok",
-      user: insertedUser,
-      token,
+      message: "user successfully registered",
+      user: getUserData(insertedUser),
+      accessToken,
     });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 });
 
 router.post("/signin", async (req, res, next) => {
   try {
-    console.log("req.body", req.body);
-    const { email, password, name = "used for validation", surname = "used for validation" } = req.body;
-    const loggingUser = { email, password, name, surname };
-    await userSchema.validate(loggingUser, { abortEarly: false });
+    const { password, name = "used for validation", username = "used for validation" } = req.body;
+    const email = req.body.email.toLowerCase();
+    const loggingUser = { email, password, name, username };
+    await userSchemaSignin.validate(loggingUser, { abortEarly: false });
     const existingUser = await User.query().where({ email }).first();
-    console.log("existingUser", existingUser);
     if (!existingUser) {
       return AuthUtils.authFailed(res);
     }
     const isValidPassword = await AuthUtils.comparePasswords(existingUser.password, password);
-    console.log("isValidPassword", isValidPassword);
 
     if (!isValidPassword) {
       return AuthUtils.authFailed(res);
     }
-    const payload = {
-      email,
-      id: existingUser.id,
-      name: existingUser.name,
-      surname: existingUser.surname,
-    };
-    const token = await AuthUtils.sign(payload);
+    const accessToken = await AuthUtils.sign(existingUser);
+    const refreshToken = uuidv4();
+    await AuthUtils.updateRefreshTokenByUserId({ refreshToken, id: existingUser.id });
+    res.cookie('refreshToken', refreshToken, {
+      maxAge: AuthUtils.REFRESH_TOKEN_EXPIRES * 60 * 1000, // convert from minute to milliseconds
+      httpOnly: true,
+      secure: false,
+    });
     res.json({
       message: "ok",
-      user: existingUser,
-      token,
+      user: getUserData(existingUser),
+      accessTokenExpiry: new Date(new Date().getTime() + (AuthUtils.JWT_TOKEN_EXPIRES * 60 * 1000)),
+      accessToken,
     });
   } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.post('/signout', (req, res, next) => {
+  res.cookie('refreshToken', " ", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+  res.send('succesfully logout');
+});
+
+router.post("/refresh-token", async (req, res, next) => {
+  try {
+    const existingUser = await AuthUtils.getUserByRefreshToken(req.cookies.refreshToken);
+
+    if (!existingUser) {
+      return AuthUtils.authFailed(res);
+    }
+    const accessToken = await AuthUtils.sign(existingUser);
+    const refreshToken = uuidv4();
+    await AuthUtils.updateRefreshTokenByUserId({ refreshToken, id: existingUser.id });
+    res.cookie('refreshToken', refreshToken, {
+      maxAge: AuthUtils.REFRESH_TOKEN_EXPIRES * 60 * 1000, // convert from minute to milliseconds
+      httpOnly: true,
+      secure: false,
+    });
+    res.json({
+      message: "ok",
+      user: getUserData(existingUser),
+      accessToken,
+      accessTokenExpiry: new Date(new Date().getTime() + (AuthUtils.JWT_TOKEN_EXPIRES * 60 * 1000)),
+    });
+  } catch (error) {
+    console.error(error);
     next(error);
   }
 });
