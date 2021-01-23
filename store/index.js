@@ -1,9 +1,12 @@
 export const state = () => ({
-  showAddGalleryForm: false,
+  user: {
+    accessToken: null,
+    accessTokenExpiry: null,
+  },
 });
 
 export const mutations = {
-  showAddGalleryForm(state) {
-    state.showAddGalleryForm = true;
+  setUser(state, { user }) {
+    state.user = user;
   },
 };

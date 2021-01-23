@@ -23,20 +23,20 @@
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
         <b-nav-form>
-          <b-form-input size="sm" class="mr-sm-2" placeholder="Search" />
-          <b-button size="sm" class="my-2 my-sm-0" type="submit">
-            Search
-          </b-button>
+          <div v-if="!isLoggedIn">
+            <b-button size="sm" class="my-2 my-sm-0" @click="signin">
+              SignIn
+            </b-button>
+          </div>
+          <div v-if="isLoggedIn">
+            <b-button size="sm" class="my-2 my-sm-0" @click="signout">
+              Signout
+            </b-button>
+            <b-avatar variant="info" src="https://placekitten.com/300/300" />
+          </div>
         </b-nav-form>
-
-        <b-nav-item-dropdown right>
-          <!-- Using 'button-content' slot -->
-          <template #button-content>
-            <em>User</em>
-          </template>
-          <b-dropdown-item href="#"> Profile </b-dropdown-item>
-          <b-dropdown-item href="#"> Sign Out </b-dropdown-item>
-        </b-nav-item-dropdown>
+        <SignInForm :key="signInFormKey" @resolved="signInFormKey++" />
+        <SignUpForm :key="signUpFormKey" @resolved="signUpFormKey++" />
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -46,7 +46,24 @@
 export default {
   name: "Header",
   data() {
-    return {};
+    return {
+      signInFormKey: 1,
+      signUpFormKey: 1,
+    };
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.state.user.accessToken;
+    },
+  },
+  methods: {
+    signin() {
+      this.$bvModal.show("signInForm");
+    },
+    signout() {
+      // TODO call signout
+      this.$store.commit("setUser", { user: {} });
+    },
   },
 };
 </script>

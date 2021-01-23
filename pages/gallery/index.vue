@@ -107,8 +107,6 @@ export default {
   methods: {
     addGallery() {
       this.$bvModal.show("addGalleryForm");
-
-      // this.$store.commit("showAddGalleryForm", true);
     },
   },
 };

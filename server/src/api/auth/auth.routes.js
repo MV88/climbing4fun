@@ -7,7 +7,11 @@ const User = require('../users/users.model');
 const AuthUtils = require('./auth.utils');
 const router = express.Router();
 
-const getUserData = user => pick(user, ["id", "name", "username", "email"]);
+const getUserData = (user, accessToken) => ({
+  ...pick(user, ["id", "name", "username", "email"]),
+  accessTokenExpiry: new Date(new Date().getTime() + (AuthUtils.JWT_TOKEN_EXPIRES * 60 * 1000)),
+  accessToken,
+});
 
 const userSchemaSignup = yup.object().shape({
   name: yup
@@ -90,8 +94,7 @@ router.post("/signup", async (req, res, next) => {
     });
     res.json({
       message: "user successfully registered",
-      user: getUserData(insertedUser),
-      accessToken,
+      user: getUserData(insertedUser, accessToken),
     });
   } catch (error) {
     console.error(error);
@@ -124,9 +127,7 @@ router.post("/signin", async (req, res, next) => {
     });
     res.json({
       message: "ok",
-      user: getUserData(existingUser),
-      accessTokenExpiry: new Date(new Date().getTime() + (AuthUtils.JWT_TOKEN_EXPIRES * 60 * 1000)),
-      accessToken,
+      user: getUserData(existingUser, accessToken),
     });
   } catch (error) {
     console.error(error);
@@ -158,10 +159,8 @@ router.post("/refresh-token", async (req, res, next) => {
       secure: false,
     });
     res.json({
-      message: "ok",
-      user: getUserData(existingUser),
-      accessToken,
-      accessTokenExpiry: new Date(new Date().getTime() + (AuthUtils.JWT_TOKEN_EXPIRES * 60 * 1000)),
+      message: "succesfully refreshed",
+      user: getUserData(existingUser, accessToken),
     });
   } catch (error) {
     console.error(error);
