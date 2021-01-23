@@ -35,8 +35,7 @@
             <b-avatar variant="info" src="https://placekitten.com/300/300" />
           </div>
         </b-nav-form>
-        <SignInForm :key="signInFormKey" @resolved="signInFormKey++" />
-        <SignUpForm :key="signUpFormKey" @resolved="signUpFormKey++" />
+        <UserForm :key="userFormKey" @resolved="userFormKey++" />
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -47,8 +46,7 @@ export default {
   name: "Header",
   data() {
     return {
-      signInFormKey: 1,
-      signUpFormKey: 1,
+      userFormKey: 1,
     };
   },
   computed: {
@@ -58,10 +56,10 @@ export default {
   },
   methods: {
     signin() {
-      this.$bvModal.show("signInForm");
+      this.$bvModal.show("UserForm");
     },
     signout() {
-      // TODO call signout
+      this.$axios.$post("/api/v1/auth/signout", {});
       this.$store.commit("setUser", { user: {} });
     },
   },

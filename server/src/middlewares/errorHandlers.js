@@ -10,7 +10,9 @@ const errorHandler = (error, req, res, next) => {
   const statusCode = res.statusCode === 200
     ? (errorTypes[error.name] || 500)
     : res.statusCode;
-  res.status(statusCode).json({
+  console.log("error.message", error.message);
+  res.status(statusCode);
+  res.json({
     status: statusCode,
     message: errorMessages[error.name] || error.message,
     stack: process.env.NODE_ENV === "production" ? "🍔" : error.stack,

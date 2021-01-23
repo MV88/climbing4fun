@@ -140,7 +140,8 @@ router.post('/signout', (req, res, next) => {
     httpOnly: true,
     expires: new Date(0),
   });
-  res.send('succesfully logout');
+  // TODO blacklist accesstoken
+  res.send('successfully logout');
 });
 
 router.post("/refresh-token", async (req, res, next) => {
@@ -159,7 +160,7 @@ router.post("/refresh-token", async (req, res, next) => {
       secure: false,
     });
     res.json({
-      message: "succesfully refreshed",
+      message: "successfully refreshed",
       user: getUserData(existingUser, accessToken),
     });
   } catch (error) {
