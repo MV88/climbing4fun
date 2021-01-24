@@ -12,38 +12,70 @@
         You have already an account?
         <b-btn @click="setFormType('signin')">Sign in</b-btn>
       </p>
-      <form @submit.prevent="isSignUp ? signup() : signin()">
+      <form
+        validated="isValidPassword || isValidEmail || isValidUsername"
+        @submit.prevent="isSignUp ? signup() : signin()"
+      >
         <div class="form-group">
-          <label>Email address</label>
-          <input
+          <label for="email">Email (*)</label>
+          <b-form-input
+            id="email"
             v-model="email"
+            :state="alreadyUsed.email ? false : isValidEmail"
             type="email"
+            trim
             class="form-control form-control-lg"
+            @input="resetServerErrors('email')"
           />
+          <b-form-invalid-feedback id="email-feedback">
+            {{
+              (alreadyUsed.email && "Already in use") ||
+              (!isValidEmail && "Insert a valid email address")
+            }}
+            <li v-for="error in emailErrors" :key="error">
+              {{ error }}
+            </li>
+          </b-form-invalid-feedback>
         </div>
         <div class="form-group">
-          <label>Password</label>
-          <input
+          <label>Password (*)</label>
+          <b-form-input
             v-model="password"
+            :state="isValidPassword"
             type="password"
             class="form-control form-control-lg"
+            @input="resetServerErrors('password')"
           />
+          <b-form-invalid-feedback id="email-feedback">
+            <li v-for="error in passwordErrors" :key="error">
+              {{ error }}
+            </li>
+          </b-form-invalid-feedback>
         </div>
         <div v-if="isSignUp" class="form-group">
           <label>Name</label>
-          <input
+          <b-form-input
             v-model="name"
-            type="name"
+            :state="isValidName"
+            type="text"
             class="form-control form-control-lg"
           />
         </div>
         <div v-if="isSignUp" class="form-group">
-          <label>Username</label>
-          <input
+          <label>Username (*)</label>
+          <b-form-input
             v-model="username"
-            type="username"
+            :state="alreadyUsed.username ? false : isValidUsername"
+            type="text"
             class="form-control form-control-lg"
+            @input="resetServerErrors('username')"
           />
+          <b-form-invalid-feedback id="username-feedback">
+            {{ alreadyUsed.username && "Already in use" }}
+            <li v-for="error in usernameErrors" :key="error">
+              {{ error }}
+            </li>
+          </b-form-invalid-feedback>
         </div>
         <button class="btn btn-dark btn-lg btn-block" type="submit">
           {{ isSignUp ? "Sign Up" : "Sign In" }}
@@ -55,23 +87,113 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import * as yup from "yup";
+
 export default {
   data() {
     // TODO remove this values
     return {
       email: "Chronos3@chronos.com",
-      name: "Chronos",
+      name: "",
       username: "Chronos",
       password: "Chronos77!",
       isSignUp: false,
+      emailErrors: [],
+      passwordErrors: [],
+      usernameErrors: [],
     };
   },
   computed: {
-    getError() {
-      return this.$store.user.error;
+    ...mapState({
+      alreadyUsed: (state) =>
+        state.auth?.alreadyUsed?.reduce((errors, field) => {
+          return { ...errors, [field?.toString().toLowerCase()]: true };
+        }, {}) || {},
+    }),
+    isValidPassword() {
+      /* eslint-disable */
+        const userPwdValidation = yup.object().shape({
+          password: yup
+            .string()
+            .min(8, "must be at least 8 characters")
+            .max(100)
+            .matches(
+              /[^a-zA-Z0-9]/,
+              "must contain a special character"
+            )
+            .matches(/[a-z]/, "must contain a lower case letter")
+            .matches(/[A-Z]/, "must contain an upper case letter")
+            .matches(/[0-9]/, "must contain a number"),
+        });
+        const password = this.password || "";
+        try {
+          const isValidPassword = userPwdValidation.validateSync(
+            { password },
+            {
+              abortEarly: false,
+            }
+          );
+          return true;
+
+        } catch (error) {
+          this.passwordErrors = error.errors;
+          return false
+        }
+    },
+    isValidEmail() {
+        const emailSchemaValidation = yup.object().shape({
+          email: yup
+            .string()
+            .trim()
+            .email()
+            .required(),
+        });
+        const email = this.email || "";
+        try {
+          const isValidEmail = emailSchemaValidation.validateSync(
+            { email },
+            {
+              abortEarly: false,
+            }
+          );
+          return true;
+
+        } catch (error) {
+          this.emailErrors = error.errors;
+          return false
+        }
+    },
+    isValidUsername() {
+      const usernameSchemaValidation = yup.object().shape({
+        username: yup.string().trim().min(2).required(),
+      });
+      const username = this.username || "";
+      try {
+        usernameSchemaValidation.validateSync(
+          { username },
+          {
+            abortEarly: false,
+          },
+        );
+        return true;
+      } catch (error) {
+        this.usernameErrors = error.errors;
+        return false;
+      }
+      /* eslint-enable */
+    },
+    isValidName() {
+      const name = this.name || "";
+      return name.length ? true : undefined;
     },
   },
   methods: {
+    resetServerErrors(name) {
+      if (this.$store.state.auth.alreadyUsed?.includes(name)) {
+        this.$store.commit("resetServerErrors", name);
+      }
+    },
     setFormType(type) {
       this.isSignUp = type === "signup";
     },

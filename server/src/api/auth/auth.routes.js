@@ -16,8 +16,7 @@ const getUserData = (user, accessToken) => ({
 const userSchemaSignup = yup.object().shape({
   name: yup
     .string()
-    .trim()
-    .min(2),
+    .trim(),
   username: yup
     .string()
     .trim()
@@ -36,8 +35,8 @@ const userSchemaSignup = yup.object().shape({
     .min(8, "password must be at least 8 characters")
     .max(100)
     .matches(/[^a-zA-Z0-9]/, "password must contain a special character")
-    .matches(/[a-z]/, "password must contain an upper case letter")
-    .matches(/[A-Z]/, "password must contain a lower case letter")
+    .matches(/[a-z]/, "password must contain a lower case letter")
+    .matches(/[A-Z]/, "password must contain an upper case letter")
     .matches(/[0-9]/, "password must contain a number")
     .required(),
 });
@@ -45,8 +44,7 @@ const userSchemaSignup = yup.object().shape({
 const userSchemaSignin = yup.object().shape({
   name: yup
     .string()
-    .trim()
-    .min(2),
+    .trim(),
   username: yup
     .string()
     .trim()
