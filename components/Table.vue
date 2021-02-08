@@ -1,5 +1,5 @@
 <template>
-  <div class="table-root">
+  <div v-if="isLoggedIn" class="table-root">
     <h3>Routes done</h3>
     <div class="table-container">
       <b-table striped hover :items="items">
@@ -20,6 +20,11 @@ export default {
     return {
       items: routes,
     };
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
+    },
   },
 };
 </script>

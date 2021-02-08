@@ -16,7 +16,6 @@ exports.seed = async (knex) => {
 
   const user = {
     name: "Matteo",
-    surname: "V",
     username: "ChronosOutOfTime",
     email: "teo.rubber@gmail.com",
     password: await bcrypt.hash(password, 12),

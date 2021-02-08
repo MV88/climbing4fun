@@ -8,7 +8,7 @@
     <b-navbar-toggle target="nav-collapse" />
 
     <b-collapse id="nav-collapse" is-nav>
-      <b-navbar-nav>
+      <b-navbar-nav v-if="isLoggedIn">
         <b-nav-item>
           <NuxtLink to="/routes" tag="span"> Routes </NuxtLink>
         </b-nav-item>
@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     isLoggedIn() {
-      return this.$store.state.user.accessToken;
+      return this.$store.getters.isLoggedIn;
     },
   },
   methods: {
@@ -61,6 +61,7 @@ export default {
     signout() {
       this.$axios.$post("/api/v1/auth/signout", {});
       this.$store.commit("setUser", { user: {} });
+      this.$store.$router.push("/");
     },
   },
 };

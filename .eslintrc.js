@@ -17,9 +17,6 @@ module.exports = {
   plugins: [],
   // add your custom rules here
   rules: {
-    semi: [2, "always"],
-    quotes: [0, "single", "avoid-escape"],
-    "comma-dangle": ["error", "always-multiline"],
     "vue/html-self-closing": [
       "error",
       {

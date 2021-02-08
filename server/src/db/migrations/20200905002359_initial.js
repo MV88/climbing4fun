@@ -68,15 +68,15 @@ exports.up = async (knex) => {
   });
   await knex.schema.createTable(tableNames.rope, (table) => {
     table.increments().notNullable();
-    table.string("name").notNullable();
+    table.string("brand").notNullable();
     table.string("color").notNullable();
     table.float("length").notNullable();
     table.float("thickness").notNullable();
-    table.string("owner").unique().notNullable();
-    table.datetime("purchaseDate").notNullable();
-    table.string("shopLink").notNullable();
+    table.string("owner").notNullable();
+    table.datetime("purchaseDate");
+    table.string("shopLink");
     references(table, tableNames.user, false, "owner");
-    references(table, tableNames.media, true, "thumbnail");
+    references(table, tableNames.media, false, "thumbnail");
     addDefaultColumns(table);
   });
   await knex.schema.createTable(tableNames.attempt, (table) => {

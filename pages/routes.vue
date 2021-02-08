@@ -1,22 +1,23 @@
 <template>
   <span>
     <Header />
-    <div class="jc-c ta-c">
+    <b-container class="start">
       <h3>Routes</h3>
-    </div>
+      <Table v-if="isLoggedIn" />
+    </b-container>
   </span>
 </template>
 
 <script>
-import { routes, ropes } from "../static/resources";
-
 export default {
-  name: "Table",
+  name: "Routes",
   data() {
-    return {
-      items: routes,
-      ropes,
-    };
+    return {};
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
+    },
   },
 };
 </script>

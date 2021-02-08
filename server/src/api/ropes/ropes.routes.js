@@ -1,40 +1,17 @@
+
 const express = require("express");
-// const { checkAuth } = require('../auth/auth.utils');
+
+const { checkAuth } = require('../auth/auth.utils');
+// const Media = require('../media/media.model');
+const upload = require('../../utils/upload');
 const Rope = require('./ropes.model');
 
 const router = express.Router();
 
-/*
-const multer = require('multer');
-const checkAuth = require('../middlewares/check-auth');
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, new Date().toISOString() + file.originalName);
-  },
-});
-const fileFilter = (req, file, cb) => {
-  if (file.mimeType === "image/jpeg" || file.mimeType === "image/png") {
-    // accept a file
-    cb(null, true);
-  } else {
-    // reject a file
-    cb(null, false);
-  }
-};
-
-const upload = multer({
-  storage,
-  limits: { fileSize: 1024 * 1024 * 5 },
-  fileFilter,
-});
-*/
 router.get("/", async (req, res, next) => {
   try {
-    const ropes = await Rope.query();
-    res.status(200).json({ ropes });
+    const ropes = await Rope.query().select("*").joinRelated('hasThumbnail');
+    res.status(200).json({ result: ropes, length: ropes.length });
   } catch (e) {
     next(e);
   }
@@ -43,17 +20,45 @@ router.get("/:ropeId", async (req, res, next) => {
   try {
     const { id } = req.params;
     const ropes = await Rope.query().select({ id });
-    res.status(200).json({ ropes });
+    res.status(200).json({ result: ropes });
   } catch (e) {
     next(e);
   }
 });
 // TODO manage uploads
 // TODO test check Auth
-router.post("/", /* checkAuth, /* upload.single("ropeImage"), */ async (req, res, next) => {
+router.post("/", checkAuth, upload.single("thumbnail"), async (req, res, next) => {
   try {
-    const rope = await Rope.query().insert(req.body);
-    res.status(200).json({ rope, message: "Rope inserted correctly" });
+    const rope = req.body;
+    const url = `/${req.file.filename}`;
+
+    const media = {
+      name: `${rope.brand} ${rope.color}`,
+      url,
+      mimeType: req.file.mimetype,
+      description: req.file.filename,
+    };
+    // const mediaCreated = await Media.query().insert(media);
+
+    if (rope.purchaseDate === "") {
+      delete rope.purchaseDate;
+    }
+
+    if (rope.owner === "yes") {
+      rope.ownerId = req.userData.id;
+      rope.owner = "";
+    } else {
+      rope.owner = rope.ownerName;
+    }
+    delete rope.ownerName;
+    const ropeCreated = await Rope.query().insertGraph({
+      ...rope,
+      hasThumbnail: [{
+        ...media,
+      }],
+    });
+    ropeCreated.url = url;
+    res.status(200).json({ result: { rope: ropeCreated }, message: "Rope inserted correctly" });
   } catch (e) {
     next(e);
   }

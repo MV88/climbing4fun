@@ -8,8 +8,8 @@ const catch500Error = (res, error) => {
 
 const User = require('../users/users.model');
 const REFRESH_TOKEN_EXPIRES = 30 * 24 * 60; // 30d in minutes
-const JWT_TOKEN_EXPIRES = 15; // minutes
-
+const JWT_TOKEN_EXPIRES = 1500; // minutes
+// TODO restore token expiration to 15m
 const authFailed = res => res.status(401).json({ message: "Auth failed" });
 
 /**
@@ -44,7 +44,7 @@ const comparePasswords = (userPwdFromDB, notHashedPWD) => {
 
 const checkAuth = (req, res, next) => {
   try {
-    const token = req.headers.authorization.split()[1]; // remove Bearer
+    const token = req.headers.authorization.split(" ")[1]; // remove Bearer
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.userData = decoded;
 

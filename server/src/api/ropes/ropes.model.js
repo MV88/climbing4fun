@@ -13,7 +13,6 @@ class Rope extends Model {
       title: "The Rope schema",
       description: "The Rope.",
       required: [
-        "ownerId",
         "brand",
         "color",
         "length",
@@ -27,8 +26,13 @@ class Rope extends Model {
         },
         ownerId: {
           $id: "#/properties/ownerId",
-          type: "string",
+          type: "integer",
           title: "The id of the user that is the owner",
+        },
+        thumbnailId: {
+          $id: "#/properties/thumbnailId",
+          type: "integer",
+          title: "The id of the media",
         },
         brand: {
           $id: "#/properties/brand",
@@ -92,6 +96,21 @@ class Rope extends Model {
         },
       },
       additionalProperties: false,
+    };
+  }
+
+  static get relationMappings () {
+    const Media = require('../media/media.model');
+
+    return {
+      hasThumbnail: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Media,
+        join: {
+          from: `${tableNames.rope}.thumbnailId`,
+          to: `${tableNames.media}.id`,
+        },
+      },
     };
   }
 }

@@ -112,57 +112,47 @@ export default {
         }, {}) || {},
     }),
     isValidPassword() {
-      /* eslint-disable */
-        const userPwdValidation = yup.object().shape({
-          password: yup
-            .string()
-            .min(8, "must be at least 8 characters")
-            .max(100)
-            .matches(
-              /[^a-zA-Z0-9]/,
-              "must contain a special character"
-            )
-            .matches(/[a-z]/, "must contain a lower case letter")
-            .matches(/[A-Z]/, "must contain an upper case letter")
-            .matches(/[0-9]/, "must contain a number"),
-        });
-        const password = this.password || "";
-        try {
-          const isValidPassword = userPwdValidation.validateSync(
-            { password },
-            {
-              abortEarly: false,
-            }
-          );
-          return true;
-
-        } catch (error) {
-          this.passwordErrors = error.errors;
-          return false
-        }
+      const userPwdValidation = yup.object().shape({
+        password: yup
+          .string()
+          .min(8, "must be at least 8 characters")
+          .max(100)
+          .matches(/[^a-zA-Z0-9]/, "must contain a special character")
+          .matches(/[a-z]/, "must contain a lower case letter")
+          .matches(/[A-Z]/, "must contain an upper case letter")
+          .matches(/[0-9]/, "must contain a number"),
+      });
+      const password = this.password || "";
+      try {
+        userPwdValidation.validateSync(
+          { password },
+          {
+            abortEarly: false,
+          }
+        );
+        return true;
+      } catch (error) {
+        this.setPasswordErrors(error.errors);
+        return false;
+      }
     },
     isValidEmail() {
-        const emailSchemaValidation = yup.object().shape({
-          email: yup
-            .string()
-            .trim()
-            .email()
-            .required(),
-        });
-        const email = this.email || "";
-        try {
-          const isValidEmail = emailSchemaValidation.validateSync(
-            { email },
-            {
-              abortEarly: false,
-            }
-          );
-          return true;
-
-        } catch (error) {
-          this.emailErrors = error.errors;
-          return false
-        }
+      const emailSchemaValidation = yup.object().shape({
+        email: yup.string().trim().email().required(),
+      });
+      const email = this.email || "";
+      try {
+        emailSchemaValidation.validateSync(
+          { email },
+          {
+            abortEarly: false,
+          }
+        );
+        return true;
+      } catch (error) {
+        this.setEmailErrors(error.errors);
+        return false;
+      }
     },
     isValidUsername() {
       const usernameSchemaValidation = yup.object().shape({
@@ -174,14 +164,13 @@ export default {
           { username },
           {
             abortEarly: false,
-          },
+          }
         );
         return true;
       } catch (error) {
-        this.usernameErrors = error.errors;
+        this.setUsernameErrors(error.errors);
         return false;
       }
-      /* eslint-enable */
     },
     isValidName() {
       const name = this.name || "";
@@ -189,6 +178,15 @@ export default {
     },
   },
   methods: {
+    setEmailErrors(errors) {
+      this.emailErrors = errors;
+    },
+    setPasswordErrors(errors) {
+      this.passwordErrors = errors;
+    },
+    setUsernameErrors(errors) {
+      this.usernameErrors = errors;
+    },
     resetServerErrors(name) {
       if (this.$store.state.auth.alreadyUsed?.includes(name)) {
         this.$store.commit("resetServerErrors", name);
