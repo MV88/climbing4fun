@@ -1,6 +1,5 @@
 <template>
   <div id="root">
-    <Header />
     <Home />
   </div>
 </template>
@@ -10,10 +9,15 @@ export default {};
 </script>
 
 <style>
+#__nuxt {
+  width: 70%;
+  margin: auto;
+}
 .container {
+  flex-direction: column;
   margin: 0 auto;
-  min-height: 100vh;
   display: flex;
+  position: relative;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -36,8 +40,17 @@ export default {};
   word-spacing: 5px;
   padding-bottom: 15px;
 }
-
 .links {
   padding-top: 15px;
+}
+.nuxt-link-exact-active {
+  color: white;
+}
+
+.table-container {
+  width: 100%;
+}
+.table-root {
+  width: 100%;
 }
 </style>

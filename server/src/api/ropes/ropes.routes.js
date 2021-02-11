@@ -11,16 +11,16 @@ const router = express.Router();
 router.get("/", async (req, res, next) => {
   try {
     const ropes = await Rope.query().select("*").joinRelated('hasThumbnail');
-    res.status(200).json({ result: ropes, length: ropes.length });
+    res.status(200).json({ length: ropes.length, result: ropes });
   } catch (e) {
     next(e);
   }
 });
 router.get("/:ropeId", async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const ropes = await Rope.query().select({ id });
-    res.status(200).json({ result: ropes });
+    const { ropeId } = req.params;
+    const rope = await Rope.query().where({ id: ropeId });
+    res.status(200).json({ result: rope });
   } catch (e) {
     next(e);
   }

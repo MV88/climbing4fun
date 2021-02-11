@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header />
     <div class="ta-c">
       <h3 class="title">Photo Gallery</h3>
     </div>
@@ -143,16 +142,12 @@ img {
 .card-link + .card-link {
   margin-left: 0;
 }
-.floating {
-  position: fixed;
-  bottom: 100px;
-  right: 100px;
-}
+
 .btn-circle.btn {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   padding: 0px;
-  border-radius: 25px;
+  border-radius: 15px;
   font-size: 10px;
   text-align: center;
 }

@@ -8,7 +8,7 @@ const catch500Error = (res, error) => {
 
 const User = require('../users/users.model');
 const REFRESH_TOKEN_EXPIRES = 30 * 24 * 60; // 30d in minutes
-const JWT_TOKEN_EXPIRES = 1500; // minutes
+const JWT_TOKEN_EXPIRES = 150000; // minutes
 // TODO restore token expiration to 15m
 const authFailed = res => res.status(401).json({ message: "Auth failed" });
 

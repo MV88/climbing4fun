@@ -2,12 +2,16 @@
   <b-navbar sticky toggleable="lg" type="dark" variant="info">
     <b-navbar-brand href="#">
       <b-img src="../assets/Mediamodifier-Design.svg" height="36" />
-      <NuxtLink to="/" tag="span"> Climbing 4 fun </NuxtLink>
     </b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse" />
 
     <b-collapse id="nav-collapse" is-nav>
+      <b-navbar-nav>
+        <b-nav-item>
+          <NuxtLink to="/" tag="span"> Home </NuxtLink>
+        </b-nav-item>
+      </b-navbar-nav>
       <b-navbar-nav v-if="isLoggedIn">
         <b-nav-item>
           <NuxtLink to="/routes" tag="span"> Routes </NuxtLink>
@@ -19,7 +23,6 @@
           <NuxtLink to="/gallery" tag="span"> Gallery </NuxtLink>
         </b-nav-item>
       </b-navbar-nav>
-
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
         <b-nav-form>
@@ -67,4 +70,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.hide {
+  display: none;
+}
+</style>

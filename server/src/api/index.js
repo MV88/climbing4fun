@@ -5,6 +5,8 @@ const auth = require('./auth/auth.routes');
 const users = require('./users/users.routes');
 const ropes = require('./ropes/ropes.routes');
 const media = require('./media/media.routes');
+const climbingRoute = require('./climbingRoutes/climbingRoute.routes');
+const grade = require('./grades/grade.routes');
 
 const router = express.Router();
 router.get("/", (req, res) => {
@@ -15,5 +17,7 @@ router.use("/styles", styles);
 router.use("/users", users);
 router.use("/ropes", ropes);
 router.use("/auth", auth);
+router.use("/climbing-routes", climbingRoute);
+router.use("/grades", grade);
 
 module.exports = router;

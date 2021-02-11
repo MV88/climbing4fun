@@ -14,8 +14,4 @@ export default {
   },
 };
 </script>
-<style>
-.container {
-  flex-direction: column;
-}
-</style>
+<style></style>

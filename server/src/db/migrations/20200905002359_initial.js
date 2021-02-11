@@ -22,9 +22,9 @@ exports.up = async (knex) => {
     }),
     knex.schema.createTable(tableNames.grade, (table) => {
       table.increments().notNullable();
-      table.string("french").notNullable();
-      table.string("american").notNullable();
-      table.string("english").notNullable();
+      table.string("french").unique().notNullable();
+      table.string("american");
+      table.string("english");
       addDefaultColumns(table);
     }),
     knex.schema.createTable(tableNames.style, (table) => {
