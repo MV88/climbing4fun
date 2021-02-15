@@ -20,6 +20,9 @@
           <NuxtLink to="/ropes" tag="span"> Ropes </NuxtLink>
         </b-nav-item>
         <b-nav-item>
+          <NuxtLink to="/attempts" tag="span"> Attempts </NuxtLink>
+        </b-nav-item>
+        <b-nav-item>
           <NuxtLink to="/gallery" tag="span"> Gallery </NuxtLink>
         </b-nav-item>
       </b-navbar-nav>
