@@ -1,22 +1,38 @@
 <template>
-  <div v-if="isLoggedIn" class="table-root">
-    <br />
-    <div class="inline">
-      <h3>All climbing routes currently store</h3>
-      <b-button pill class="floating btn-circle" @click="addClimbingRoute"
-        ><b-icon icon="plus" style="width: 25px; height: 25px"
-      /></b-button>
-    </div>
-    <div class="table-container">
-      <b-table striped hover :items="items" :fields="fields">
-        <template #cell(link)="data">
-          <a :href="data.value">link</a>
-        </template>
-        <template #cell(hasGrade)="data">
-          {{ data.value.french }}
-        </template>
-      </b-table>
-    </div>
+  <div class="table-container">
+    <h3>Climbing Routes</h3>
+    <b-table striped hover :items="items" :fields="fields">
+      <template #cell(link)="data">
+        <a :href="data.value" target="_blank">link</a>
+      </template>
+      <template #cell(hasGrade)="data">
+        {{ data.value.french }}
+      </template>
+      <template #cell(actions)="data">
+        <div class="flex">
+          <b-btn @click.stop="editRoute(data.item)">
+            <b-icon icon="pencil" scale="0.75" />
+          </b-btn>
+          <b-btn
+            :id="`${data.item.id}delete`"
+            @click.stop="showPopoverById(data.item.id)"
+          >
+            <b-icon icon="trash" scale="0.75"
+          /></b-btn>
+          <b-popover
+            :show="showId === data.item.id"
+            :target="`${data.item.id}delete`"
+            triggers="click"
+            title="Click on Delete if you are sure"
+          >
+            <b-btn @click="showPopoverById(null)">Cancel</b-btn>
+            <b-btn variant="danger" @click="deleteById(data.item.id)"
+              >Delete</b-btn
+            >
+          </b-popover>
+        </div>
+      </template>
+    </b-table>
   </div>
 </template>
 
@@ -25,6 +41,7 @@ export default {
   name: "RouteTable",
   props: {
     items: { type: Array, default: () => [] },
+    showId: { type: Number, default: null },
   },
   data() {
     return {
@@ -51,6 +68,9 @@ export default {
           key: "city",
           sortable: true,
         },
+        {
+          key: "actions",
+        },
       ],
     };
   },
@@ -62,6 +82,15 @@ export default {
   methods: {
     addClimbingRoute() {
       this.$emit("addClimbingRoute");
+    },
+    showPopoverById(routeId) {
+      this.$emit("updateRouteId", routeId);
+    },
+    editRoute(route) {
+      this.$emit("editRoute", route);
+    },
+    deleteById(routeId) {
+      this.$emit("deleteRouteById", routeId);
     },
   },
 };

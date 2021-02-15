@@ -9,7 +9,7 @@ router.get("/", async (req, res, next) => {
   try {
     const routes = await ClimbingRoute.query()
       .withGraphFetched('hasGrade(french)')
-      .select("name", "sector", "city", "link")
+      .select("id", "name", "sector", "city", "link")
       .modifiers({
         french (builder) {
           builder.select('french');
@@ -59,8 +59,32 @@ router.post("/", checkAuth, async (req, res, next) => {
     next(e);
   }
 });
-/*
-router.patch("/:ropeId", checkAuth, ropesPatchById);
-router.delete("/:ropeId", checkAuth, ropesDeleteById);
-*/
+router.delete("/:routeId", checkAuth, async (req, res, next) => {
+  try {
+    const { routeId } = req.params;
+    const numDeleted = await ClimbingRoute.query().deleteById(routeId);
+    res.status(200).json({ result: numDeleted, message: "route deleted correctly" });
+  } catch (e) {
+    next(e);
+  }
+});
+router.patch("/:routeId", checkAuth, async (req, res, next) => {
+  try {
+    const { routeId } = req.params;
+    const { french, ...route } = req.body;
+    const grade = await Grade.query().select("id").where({ french }).first();
+    await ClimbingRoute.query().findById(routeId).patch({ ...route, gradeId: grade.id });
+    const routePatched = await ClimbingRoute.query()
+      .where({ id: routeId })
+      .withGraphFetched('hasGrade(french)')
+      .modifiers({
+        french (builder) {
+          builder.select('french');
+        },
+      }).first();
+    res.status(200).json({ result: routePatched, message: "route patched correctly" });
+  } catch (e) {
+    next(e);
+  }
+});
 module.exports = router;

@@ -5,7 +5,7 @@
       title="Add Climbing Route Form"
       hide-footer
     >
-      <b-form @submit="onSubmit" @reset="onReset">
+      <b-form @submit.prevent="onSubmit" @reset="onReset">
         <b-form-group
           id="input-group-name"
           label="Name"
@@ -92,6 +92,9 @@
 
 <script>
 export default {
+  props: {
+    editingRoute: { type: Object, default: () => null },
+  },
   data() {
     return {
       gradesFr: [
@@ -138,34 +141,62 @@ export default {
         "9c",
         "9c+",
       ],
-      sectors: ["Gommania e Abside", "Paretina e radice"],
-      form: {
-        name: "Tredici",
-        sector: "",
-        french: "",
-        link:
-          "https://www.falesiaonline.it/settorefoto/329/gommamania-e-abside.html",
-        city: "Vecchiano",
-      },
+      sectors: [
+        "Gommamania e Abside",
+        "Paretina e radice",
+        "Il nido a sinistra",
+        "Di Giacomo",
+      ],
     };
   },
+  computed: {
+    form() {
+      return {
+        name: this.editingRoute?.name || "Tredici",
+        sector: this.editingRoute?.sector || "",
+        french: this.editingRoute?.hasGrade?.french || "",
+        link:
+          this.editingRoute?.link ||
+          "https://www.falesiaonline.it/settorefoto/329/gommamania-e-abside.html",
+        city: this.editingRoute?.city || "Vecchiano",
+      };
+    },
+  },
   methods: {
-    onSubmit(event) {
-      event.preventDefault();
-      this.$axios
-        .$post("/api/v1/climbing-routes", this.form, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.$store.getters.accessToken}`,
-          },
-        })
-        .then((data) => {
-          console.log("adding route", data.result);
-          this.$emit("update", {
-            ...data.result,
-            hasGrade: { french: this.form.french },
+    onSubmit() {
+      if (this.editingRoute) {
+        this.$axios
+          .$patch(
+            `/api/v1/climbing-routes/${this.editingRoute.id}`,
+            this.form,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${this.$store.getters.accessToken}`,
+              },
+            }
+          )
+          .then((data) => {
+            this.$emit("updateById", this.editingRoute.id, {
+              ...data.result,
+              hasGrade: { french: this.form.french },
+            });
           });
-        });
+      } else {
+        this.$axios
+          .$post("/api/v1/climbing-routes", this.form, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${this.$store.getters.accessToken}`,
+            },
+          })
+          .then((data) => {
+            this.$emit("update", {
+              ...data.result,
+              hasGrade: { french: this.form.french },
+            });
+          });
+      }
       this.$bvModal.hide("addClimbingRouteForm");
     },
     onReset(event) {

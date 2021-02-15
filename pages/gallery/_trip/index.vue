@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header />
     <div class="ta-c">
       <h3 class="title">{{ this.$route.params.trip }}</h3>
     </div>

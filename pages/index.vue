@@ -53,4 +53,7 @@ export default {};
 .table-root {
   width: 100%;
 }
+body {
+  background-color: antiquewhite;
+}
 </style>
