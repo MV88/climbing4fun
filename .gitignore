@@ -92,3 +92,5 @@ sw.*
 # vscode
 .vscode
 .vscode/launch.json
+
+static

@@ -10,7 +10,7 @@
       </template>
       <template #cell(actions)="data">
         <div class="flex">
-          <b-btn @click.stop="editRoute(data.item)">
+          <b-btn @click.stop="editItem(data.item)">
             <b-icon icon="pencil" scale="0.75" />
           </b-btn>
           <b-btn
@@ -26,7 +26,7 @@
             title="Click on Delete if you are sure"
           >
             <b-btn @click="showPopoverById(null)">Cancel</b-btn>
-            <b-btn variant="danger" @click="deleteById(data.item.id)"
+            <b-btn variant="danger" @click="deleteItemById(data.item.id)"
               >Delete</b-btn
             >
           </b-popover>
@@ -80,17 +80,17 @@ export default {
     },
   },
   methods: {
-    addClimbingRoute() {
-      this.$emit("addClimbingRoute");
-    },
     showPopoverById(routeId) {
-      this.$emit("updateRouteId", routeId);
+      this.$emit("updateItemById", routeId);
     },
-    editRoute(route) {
-      this.$emit("editRoute", route);
+    editItem(route) {
+      this.$emit("editItem", route);
     },
-    deleteById(routeId) {
-      this.$emit("deleteRouteById", routeId);
+    updateItemById(routeId) {
+      this.$emit("updateItemById", routeId);
+    },
+    deleteItemById(routeId) {
+      this.$emit("deleteItemById", routeId);
     },
   },
 };

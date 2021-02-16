@@ -64,6 +64,7 @@ router.delete("/:routeId", checkAuth, async (req, res, next) => {
     const { routeId } = req.params;
     const numDeleted = await ClimbingRoute.query().deleteById(routeId);
     res.status(200).json({ result: numDeleted, message: "route deleted correctly" });
+    // TODO use soft delete
   } catch (e) {
     next(e);
   }

@@ -6,9 +6,8 @@
         :show-id="routeId"
         :items="climbingRoutes"
         @updateRouteId="showPopoverById"
-        @addClimbingRoute="addClimbingRoute"
-        @editRoute="editRoute"
-        @deleteRouteById="deleteRouteById"
+        @editItem="editItem"
+        @deleteItemById="deleteItemById"
       />
       <b-row>
         <h4>TODO: Filters</h4>
@@ -21,13 +20,13 @@
 
       <ClimbingRoutesForm
         :editing-route="editingRoute"
-        @updateById="updateById"
-        @update="update"
+        @updateItemById="updateItemById"
+        @updateListItem="updateListItem"
       />
     </b-container>
     <div class="right-sidebar">
       <div class="right-column">
-        <b-btn @click="addClimbingRoute">
+        <b-btn @click="addItem">
           <b-icon icon="plus" scale="1.5" />
         </b-btn>
       </div>
@@ -62,16 +61,16 @@ export default {
     showPopoverById(routeId) {
       this.routeId = routeId;
     },
-    addClimbingRoute() {
+    addItem() {
       this.editingRoute = null;
       this.$bvModal.show("addClimbingRouteForm");
     },
-    editRoute(route) {
-      this.editingRoute = route;
+    editItem(item) {
+      this.editingRoute = item;
       this.$bvModal.show("addClimbingRouteForm");
     },
-    async deleteRouteById(routeId) {
-      await this.$axios.$delete(`/api/v1/climbing-routes/${routeId}`, {
+    async deleteItemById(id) {
+      await this.$axios.$delete(`/api/v1/climbing-routes/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.$store.getters.accessToken}`,
@@ -79,10 +78,10 @@ export default {
       });
       this.getData();
     },
-    update(item) {
+    updateListItem(item) {
       this.climbingRoutes.push(item);
     },
-    updateById(id, item) {
+    updateItemById(id, item) {
       this.climbingRoutes.splice(
         findIndex(this.climbingRoutes, { id }),
         1,

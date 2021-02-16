@@ -2,7 +2,6 @@
 const express = require("express");
 
 const { checkAuth } = require('../auth/auth.utils');
-// const Media = require('../media/media.model');
 const upload = require('../../utils/upload');
 const Rope = require('./ropes.model');
 
@@ -10,23 +9,28 @@ const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   try {
-    const ropes = await Rope.query().select("*").joinRelated('hasThumbnail');
+    const ropes = await Rope.query()
+      .withGraphFetched('hasThumbnail(thumbnail)')
+      .select("*")
+      .modifiers({
+        thumbnail (builder) {
+          builder.select('url');
+        },
+      });
     res.status(200).json({ length: ropes.length, result: ropes });
   } catch (e) {
     next(e);
   }
 });
-router.get("/:ropeId", async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
-    const { ropeId } = req.params;
-    const rope = await Rope.query().where({ id: ropeId });
+    const { id } = req.params;
+    const rope = await Rope.query().where({ id });
     res.status(200).json({ result: rope });
   } catch (e) {
     next(e);
   }
 });
-// TODO manage uploads
-// TODO test check Auth
 router.post("/", checkAuth, upload.single("thumbnail"), async (req, res, next) => {
   try {
     const rope = req.body;
@@ -63,8 +67,27 @@ router.post("/", checkAuth, upload.single("thumbnail"), async (req, res, next) =
     next(e);
   }
 });
-/*
-router.patch("/:ropeId", checkAuth, ropesPatchById);
-router.delete("/:ropeId", checkAuth, ropesDeleteById);
-*/
+router.delete("/:id", checkAuth, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    // TODO use soft delete
+    const numDeleted = await Rope.query().deleteById(id);
+    res.status(200).json({ result: numDeleted, message: "rope deleted correctly" });
+  } catch (e) {
+    next(e);
+  }
+});
+router.patch("/:id", checkAuth, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const rope = req.body;
+    await Rope.query().findById(id).patch(rope);
+    const ropePatched = await Rope.query()
+      .where({ id })
+      .first();
+    res.status(200).json({ result: ropePatched, message: "rope patched correctly" });
+  } catch (e) {
+    next(e);
+  }
+});
 module.exports = router;

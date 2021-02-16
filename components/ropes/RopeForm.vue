@@ -160,21 +160,28 @@
 
 <script>
 export default {
+  props: {
+    editingItem: { type: Object, default: () => null },
+  },
   data() {
     return {
-      form: {
-        owner: "yes",
-        ownerName: "",
-        brand: "",
-        color: "",
-        length: "",
-        shopLink: "",
-        thickness: "",
-        thumbnail: null,
-        purchaseDate: "",
-      },
       previewImageSrc: "",
     };
+  },
+  computed: {
+    form() {
+      return {
+        owner: this.editingItem?.owner || "yes",
+        ownerName: this.editingItem?.ownerName || "",
+        brand: this.editingItem?.brand || "",
+        color: this.editingItem?.color || "",
+        length: this.editingItem?.length || "",
+        shopLink: this.editingItem?.shopLink || "",
+        thickness: this.editingItem?.thickness || "",
+        thumbnail: this.editingItem?.thumbnail || null,
+        purchaseDate: this.editingItem?.purchaseDate || "",
+      };
+    },
   },
   methods: {
     onSubmit(event) {
@@ -193,16 +200,33 @@ export default {
         this.form.thumbnail.name
       );
       formData.append("purchaseDate", this.form.purchaseDate);
-      this.$axios
-        .$post("/api/v1/ropes", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${this.$store.getters.accessToken}`,
-          },
-        })
-        .then((data) => {
-          this.$emit("updateRope", data.result.rope);
-        });
+
+      if (this.editingItem) {
+        this.$axios
+          .$patch(`/api/v1/ropes/${this.editingItem.id}`, this.form, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${this.$store.getters.accessToken}`,
+            },
+          })
+          .then((data) => {
+            this.$emit("updateItemById", this.editingItem.id, {
+              ...data.result,
+              hasGrade: { french: this.form.french },
+            });
+          });
+      } else {
+        this.$axios
+          .$post("/api/v1/ropes", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${this.$store.getters.accessToken}`,
+            },
+          })
+          .then((data) => {
+            this.$emit("updateListItem", data.result.rope);
+          });
+      }
       this.$bvModal.hide("addRopeForm");
     },
     onReset(event) {

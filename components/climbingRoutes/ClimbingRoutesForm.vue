@@ -191,7 +191,7 @@ export default {
             },
           })
           .then((data) => {
-            this.$emit("update", {
+            this.$emit("updateListItem", {
               ...data.result,
               hasGrade: { french: this.form.french },
             });
