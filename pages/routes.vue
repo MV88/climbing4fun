@@ -1,11 +1,12 @@
 <template>
-  <div class="route-container" @click="showPopoverById(null)">
+  <div class="flex-container" @click="showPopoverById(null)">
     <b-container>
       <RouteTable
         v-if="isLoggedIn"
-        :show-id="routeId"
+        :item-id="routeId"
         :items="climbingRoutes"
-        @updateRouteId="showPopoverById"
+        @showPopoverById="showPopoverById"
+        @updateItemById="updateItemById"
         @editItem="editItem"
         @deleteItemById="deleteItemById"
       />
@@ -92,8 +93,4 @@ export default {
 };
 </script>
 
-<style>
-.route-container {
-  display: flex;
-}
-</style>
+<style></style>

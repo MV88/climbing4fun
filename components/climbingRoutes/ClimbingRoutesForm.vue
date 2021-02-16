@@ -201,6 +201,7 @@ export default {
     },
     onReset(event) {
       event.preventDefault();
+      this.$bvModal.hide("addClimbingRouteForm");
       // Reset our form values
       this.form = {
         name: "",

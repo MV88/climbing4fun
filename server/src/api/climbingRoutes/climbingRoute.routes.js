@@ -1,6 +1,6 @@
 const express = require("express");
 const { checkAuth } = require('../auth/auth.utils');
-const Grade = require('../grades/grade.model');
+const Grade = require('../grades/grades.model');
 const ClimbingRoute = require('./climbingRoute.model');
 
 const router = express.Router();

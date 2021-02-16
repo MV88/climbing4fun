@@ -20,7 +20,7 @@
             <b-icon icon="trash" scale="0.75"
           /></b-btn>
           <b-popover
-            :show="showId === data.item.id"
+            :show="itemId === data.item.id"
             :target="`${data.item.id}delete`"
             triggers="click"
             title="Click on Delete if you are sure"
@@ -41,7 +41,7 @@ export default {
   name: "RouteTable",
   props: {
     items: { type: Array, default: () => [] },
-    showId: { type: Number, default: null },
+    itemId: { type: Number, default: null },
   },
   data() {
     return {
@@ -80,17 +80,17 @@ export default {
     },
   },
   methods: {
-    showPopoverById(routeId) {
-      this.$emit("updateItemById", routeId);
+    showPopoverById(id) {
+      this.$emit("showPopoverById", id);
     },
     editItem(route) {
       this.$emit("editItem", route);
     },
-    updateItemById(routeId) {
-      this.$emit("updateItemById", routeId);
+    updateItemById(id) {
+      this.$emit("updateItemById", id);
     },
-    deleteItemById(routeId) {
-      this.$emit("deleteItemById", routeId);
+    deleteItemById(id) {
+      this.$emit("deleteItemById", id);
     },
   },
 };

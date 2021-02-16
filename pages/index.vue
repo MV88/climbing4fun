@@ -53,6 +53,9 @@ export default {};
 .table-root {
   width: 100%;
 }
+.flex-container {
+  display: flex;
+}
 body {
   background-color: antiquewhite;
 }

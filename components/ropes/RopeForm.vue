@@ -151,8 +151,8 @@
             >
           </div>
         </b-form-group>
+        <b-button type="reset">Cancel</b-button>
         <b-button type="submit" variant="primary">Submit</b-button>
-        <b-button type="reset" variant="danger">Reset</b-button>
       </b-form>
     </b-modal>
   </div>
@@ -231,6 +231,7 @@ export default {
     },
     onReset(event) {
       event.preventDefault();
+      this.$bvModal.hide("addRopeForm");
       // Reset our form values
       this.form.brand = "";
       this.form.owner = "yes";

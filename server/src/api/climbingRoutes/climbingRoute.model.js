@@ -64,7 +64,7 @@ class ClimbingRoute extends Model {
   }
 
   static get relationMappings () {
-    const Grade = require('../grades/grade.model');
+    const Grade = require('../grades/grades.model');
 
     return {
       hasGrade: {

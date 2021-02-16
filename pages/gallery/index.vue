@@ -1,109 +1,54 @@
 <template>
-  <div>
-    <div class="ta-c">
-      <h3 class="title">Photo Gallery</h3>
-    </div>
-    <b-container class="start">
+  <div class="flex-container">
+    <b-container>
+      <div class="ta-c">
+        <h3 class="title">Photo Gallery</h3>
+      </div>
       <b-row class="jc-c">
-        <NuxtLink :to="galleries[0].to" tag="div" class="card-link">
-          <b-card tag="article" title="Gita a Vecchiano">
-            <img :width="size" :height="size" :src="img_url" />
-
-            <b-card-text> Terza tappa stagionale 2020 </b-card-text>
-          </b-card>
-        </NuxtLink>
-        <NuxtLink :to="galleries[1].to" tag="div" class="card-link">
-          <b-card :title="defaults.title" tag="article">
-            <img :width="size" :height="size" :src="img_url" />
+        <Trip v-if="selected" :item="selected" />
+        <div v-for="item in galleries" v-else :key="item.id">
+          <b-card :title="item.title" tag="article" @click="setSelected(item)">
+            <img :width="size" :height="size" :src="item.hasThumbnail.url" />
             <b-card-text>
-              {{ defaults.subTitle }}
+              {{ item.subtitle }}
             </b-card-text>
           </b-card>
-        </NuxtLink>
-
-        <NuxtLink :to="galleries[2].to" tag="div" class="card-link">
-          <b-card :title="defaults.title" tag="article">
-            <img :width="size" :height="size" :src="img_url" />
-            <b-card-text>
-              {{ defaults.subTitle }}
-            </b-card-text>
-          </b-card>
-        </NuxtLink>
-
-        <NuxtLink to="/gallery/trip" tag="div" class="card-link">
-          <b-card :title="defaults.title" tag="article">
-            <img :width="size" :height="size" :src="img_url" />
-            <b-card-text>
-              {{ defaults.subTitle }}
-            </b-card-text>
-          </b-card>
-        </NuxtLink>
-        <NuxtLink to="/gallery/trip" tag="div" class="card-link">
-          <b-card :title="defaults.title" tag="article">
-            <img :width="size" :height="size" :src="img_url" />
-            <b-card-text>
-              {{ defaults.subTitle }}
-            </b-card-text>
-          </b-card>
-        </NuxtLink>
-        <NuxtLink to="/gallery/trip" tag="div" class="card-link">
-          <b-card :title="defaults.title" tag="article">
-            <img :width="size" :height="size" :src="img_url" />
-            <b-card-text>
-              {{ defaults.subTitle }}
-            </b-card-text>
-          </b-card>
-        </NuxtLink>
+        </div>
       </b-row>
     </b-container>
-
-    <b-button pill class="floating btn-circle" @click="addGallery"
-      ><b-icon icon="plus" style="width: 40px; height: 40px"
-    /></b-button>
+    <div class="right-sidebar">
+      <div class="right-column">
+        <b-btn @click="addGallery">
+          <b-icon icon="plus" scale="1.5" />
+        </b-btn>
+      </div>
+    </div>
     <AddGalleryForm />
   </div>
 </template>
 
 <script>
-import { routes, ropes } from "../../static/resources";
-
 export default {
   name: "Gallery",
   data() {
     return {
-      defaults: {
-        title: "untitled",
-        subTitle: "Add here some short description",
-      },
-      galleriesData: [
-        {
-          card_id: 1,
-          title: "gita a vecchiano",
-        },
-        {
-          card_id: 2,
-          title: "secondo title",
-        },
-        {
-          card_id: 3,
-          title: "terzo title",
-        },
-      ],
-      img_url: "https://picsum.photos/200/200/",
       size: 200,
-      items: routes,
-      ropes,
+      galleries: [],
+      selected: null,
     };
   },
-  computed: {
-    galleries() {
-      return this.galleriesData.map((g) => ({
-        ...g,
-        to: "/gallery/" + g.title,
-      }));
-    },
+  computed: {},
+  mounted() {
+    this.getData();
   },
   methods: {
+    async getData() {
+      const galleries = await this.$axios.get("api/v1/galleries");
+      this.galleries = galleries.data.result;
+    },
+    setSelected(item) {
+      this.selected = item;
+    },
     addGallery() {
       this.$bvModal.show("addGalleryForm");
     },

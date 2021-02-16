@@ -1,5 +1,5 @@
 const express = require("express");
-const Grade = require('./grade.model');
+const Grade = require('./grades.model');
 
 const router = express.Router();
 

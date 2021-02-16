@@ -1,5 +1,5 @@
 <template>
-  <div class="route-container" @click="showPopoverById(null)">
+  <div class="flex-container" @click="showPopoverById(null)">
     <b-container>
       <AttemptsTable
         v-if="isLoggedIn"
@@ -85,8 +85,4 @@ export default {
 };
 </script>
 
-<style>
-.route-container {
-  display: flex;
-}
-</style>
+<style></style>

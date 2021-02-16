@@ -1,5 +1,5 @@
 <template>
-  <div class="route-container" @click="showPopoverById(null)">
+  <div class="flex-container" @click="showPopoverById(null)">
     <b-container>
       <h3>Ropes owned</h3>
       <b-table striped hover :items="ropes" :fields="fields">
