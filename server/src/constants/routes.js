@@ -20,6 +20,4 @@ const routes = Papa.parse(csvData, {
   header: true,
 });
 
-module.exports = routes
-  .data
-  .map(route => (route));
+module.exports = routes.data;

@@ -8,6 +8,8 @@ const grades = require("../../constants/grades");
 const routes = require("../../constants/routes");
 const ropes = require("../../constants/ropes");
 const media = require("../../constants/media");
+const relGalleriesMedia = require("../../constants/relGalleriesMedia");
+const galleries = require("../../constants/galleries");
 
 /**
  * @param {Knex} knex
@@ -43,4 +45,6 @@ exports.seed = async (knex) => {
   await knex(tableNames.route).insert(routes, "*");
   await knex(tableNames.media).insert(media, "*");
   await knex(tableNames.rope).insert(ropes, "*");
+  await knex(tableNames.gallery).insert(galleries, "*");
+  await knex(tableNames.relGalleriesMedia).insert(relGalleriesMedia, "*");
 };

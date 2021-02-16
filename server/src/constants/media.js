@@ -20,6 +20,4 @@ const media = Papa.parse(csvData, {
   header: true,
 });
 
-module.exports = media
-  .data
-  .map(item => (item));
+module.exports = media.data;

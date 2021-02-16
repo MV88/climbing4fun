@@ -11,13 +11,13 @@ const csvData = fs
       'src',
       'db',
       'sources',
-      'grades.csv',
+      'relGalleriesMedia.csv',
     ),
     'utf8',
   );
 
-const grades = Papa.parse(csvData, {
+const relGalleriesMedia = Papa.parse(csvData, {
   header: true,
 });
 
-module.exports = grades.data;
+module.exports = relGalleriesMedia.data;
