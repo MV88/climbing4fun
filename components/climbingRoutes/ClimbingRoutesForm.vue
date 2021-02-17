@@ -1,10 +1,6 @@
 <template>
   <div>
-    <b-modal
-      id="addClimbingRouteForm"
-      title="Add Climbing Route Form"
-      hide-footer
-    >
+    <b-modal id="addClimbingRouteForm" title="Climbing Route Form" hide-footer>
       <b-form @submit.prevent="onSubmit" @reset="onReset">
         <b-form-group
           id="input-group-name"
@@ -83,8 +79,8 @@
           />
         </b-form-group>
 
+        <b-button type="reset">Cancel</b-button>
         <b-button type="submit" variant="primary">Submit</b-button>
-        <b-button type="reset" variant="danger">Reset</b-button>
       </b-form>
     </b-modal>
   </div>
@@ -147,11 +143,7 @@ export default {
         "Il nido a sinistra",
         "Di Giacomo",
       ],
-    };
-  },
-  computed: {
-    form() {
-      return {
+      form: {
         name: this.editingRoute?.name || "Tredici",
         sector: this.editingRoute?.sector || "",
         french: this.editingRoute?.hasGrade?.french || "",
@@ -159,8 +151,8 @@ export default {
           this.editingRoute?.link ||
           "https://www.falesiaonline.it/settorefoto/329/gommamania-e-abside.html",
         city: this.editingRoute?.city || "Vecchiano",
-      };
-    },
+      },
+    };
   },
   methods: {
     onSubmit() {

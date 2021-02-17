@@ -1,8 +1,10 @@
 <template>
-  <div class="flex-container">
+  <div class="flex-container" @click="showDeletePopover(null)">
     <b-container>
       <div class="ta-c">
-        <h3 class="title">Photo Gallery</h3>
+        <h3 class="title">
+          {{ (selected && selected.title) || "Photo Gallery" }}
+        </h3>
       </div>
       <b-row class="jc-c">
         <Trip v-if="selected" :item="selected" />
@@ -18,15 +20,36 @@
     </b-container>
     <div class="right-sidebar">
       <div class="right-column">
-        <b-btn @click="addGallery">
+        <b-btn @click="showForm">
           <b-icon icon="plus" scale="1.5" />
         </b-btn>
         <b-btn v-if="selected" @click="clearSelected">
           <b-icon icon="arrow-left" scale="1" />
         </b-btn>
+        <b-btn v-if="selected">
+          <b-icon icon="pencil" scale="1" />
+        </b-btn>
+        <b-btn
+          v-if="selected"
+          id="deleteGallery"
+          @click.stop="showDeletePopover(selected)"
+        >
+          <b-icon icon="trash" scale="1" />
+        </b-btn>
+        <b-popover
+          :show="showDelete"
+          target="deleteGallery"
+          triggers="click"
+          title="Click on Delete if you are sure"
+        >
+          <b-btn @click="showDeletePopover(null)">Cancel</b-btn>
+          <b-btn variant="danger" @click="deleteItemById(selected.id)"
+            >Delete</b-btn
+          >
+        </b-popover>
       </div>
     </div>
-    <AddGalleryForm />
+    <GalleryForm :editing-item="selected" @updateListItem="updateListItem" />
   </div>
 </template>
 
@@ -38,6 +61,7 @@ export default {
       size: 200,
       galleries: [],
       selected: null,
+      showDelete: false,
     };
   },
   computed: {},
@@ -55,8 +79,23 @@ export default {
     clearSelected(item) {
       this.selected = null;
     },
-    addGallery() {
+    showForm() {
       this.$bvModal.show("addGalleryForm");
+    },
+    updateListItem(item) {
+      this.galleries.push(item);
+    },
+    showDeletePopover(selected) {
+      this.showDelete = !!selected;
+    },
+    async deleteItemById(id) {
+      await this.$axios.$delete(`/api/v1/galleries/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.$store.getters.accessToken}`,
+        },
+      });
+      this.getData();
     },
   },
 };

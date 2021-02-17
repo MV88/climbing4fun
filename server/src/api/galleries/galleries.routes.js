@@ -78,7 +78,7 @@ router.delete("/:id", checkAuth, async (req, res, next) => {
     const { id } = req.params;
     // TODO use soft delete
     const numDeleted = await Gallery.query().deleteById(id);
-    res.status(200).json({ result: numDeleted, message: "rope deleted correctly" });
+    res.status(200).json({ result: numDeleted, message: "gallery deleted correctly" });
   } catch (e) {
     next(e);
   }

@@ -166,11 +166,7 @@ export default {
   data() {
     return {
       previewImageSrc: "",
-    };
-  },
-  computed: {
-    form() {
-      return {
+      form: {
         owner: this.editingItem?.owner || "yes",
         ownerName: this.editingItem?.ownerName || "",
         brand: this.editingItem?.brand || "",
@@ -180,8 +176,8 @@ export default {
         thickness: this.editingItem?.thickness || "",
         thumbnail: this.editingItem?.thumbnail || null,
         purchaseDate: this.editingItem?.purchaseDate || "",
-      };
-    },
+      },
+    };
   },
   methods: {
     onSubmit(event) {
