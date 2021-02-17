@@ -21,6 +21,9 @@
         <b-btn @click="addGallery">
           <b-icon icon="plus" scale="1.5" />
         </b-btn>
+        <b-btn v-if="selected" @click="clearSelected">
+          <b-icon icon="arrow-left" scale="1" />
+        </b-btn>
       </div>
     </div>
     <AddGalleryForm />
@@ -48,6 +51,9 @@ export default {
     },
     setSelected(item) {
       this.selected = item;
+    },
+    clearSelected(item) {
+      this.selected = null;
     },
     addGallery() {
       this.$bvModal.show("addGalleryForm");

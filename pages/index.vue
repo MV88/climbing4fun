@@ -56,6 +56,13 @@ export default {};
 .flex-container {
   display: flex;
 }
+.right-column {
+  display: flex;
+  flex-direction: column;
+}
+.right-column button {
+  margin: 10px 0px 0px 0px;
+}
 body {
   background-color: antiquewhite;
 }
