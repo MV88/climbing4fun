@@ -42,8 +42,6 @@ router.post("/", checkAuth, upload.single("thumbnail"), async (req, res, next) =
       mimeType: req.file.mimetype,
       description: req.file.filename,
     };
-    // const mediaCreated = await Media.query().insert(media);
-
     if (rope.purchaseDate === "") {
       delete rope.purchaseDate;
     }

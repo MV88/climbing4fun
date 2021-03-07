@@ -134,7 +134,6 @@
               @input="pickFile"
             />
           </div>
-          <!--b-img width="125" height="125" :src="previewImageSrc" /-->
           <div class="imagePreviewWrapper">
             <div
               v-if="previewImageSrc"
@@ -270,6 +269,7 @@ export default {
   width: 120px;
   background-size: contain;
   background-position: center center;
+  margin: 0 5px 5px 0;
 }
 .cancelBtn {
   position: absolute;
@@ -277,7 +277,7 @@ export default {
   right: 0;
 }
 .imagePreviewWrapper {
-  height: 130px;
+  min-height: 130px;
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
   display: flex;

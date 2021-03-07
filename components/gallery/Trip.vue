@@ -2,7 +2,7 @@
   <div class="flex-container">
     <b-row class="jc-c">
       <b-card
-        v-for="(picture, i) in item.hasMedia"
+        v-for="(picture, i) in item.galleryMedia"
         :key="picture.url + i"
         tag="article"
         class="picture-card"

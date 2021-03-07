@@ -3,7 +3,7 @@
     <b-container>
       <div class="ta-c">
         <h3 class="title">
-          {{ (selected && selected.title) || "Photo Gallery" }}
+          {{ (selected && selected.title) || "Media Galleries" }}
         </h3>
       </div>
       <b-row class="jc-c">
@@ -70,7 +70,12 @@ export default {
   },
   methods: {
     async getData() {
-      const galleries = await this.$axios.get("api/v1/galleries");
+      const galleries = await this.$axios.get("api/v1/galleries", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.$store.getters.accessToken}`,
+        },
+      });
       this.galleries = galleries.data.result;
     },
     setSelected(item) {
@@ -83,7 +88,7 @@ export default {
       this.$bvModal.show("addGalleryForm");
     },
     updateListItem(item) {
-      this.galleries.push(item);
+      this.galleries.push(item.gallery);
     },
     showDeletePopover(selected) {
       this.showDelete = !!selected;

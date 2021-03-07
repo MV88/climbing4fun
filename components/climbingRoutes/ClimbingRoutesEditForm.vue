@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal id="addClimbingRouteForm" title="Climbing Route Form" hide-footer>
+    <b-modal id="climbingRouteEditForm" title="Climbing Route Form" hide-footer>
       <b-form @submit.prevent="onSubmit" @reset="onReset">
         <b-form-group
           id="input-group-name"
@@ -13,6 +13,7 @@
             v-model="form.name"
             :state="!!form.name"
             type="text"
+            trim
             placeholder="Enter Name"
             required
           />
@@ -24,10 +25,11 @@
           description=""
         >
           <b-form-select
-            v-model="form.french"
-            :state="!!form.french"
+            v-model="form.hasGrade.french"
+            :state="!!form.hasGrade.french"
             :options="gradesFr"
             required
+            trim
             placeholder="Enter Grade"
           />
         </b-form-group>
@@ -75,7 +77,7 @@
             id="input-city"
             v-model="form.city"
             type="text"
-            placeholder="Enter City of the climnbing route"
+            placeholder="Enter City of the climbing route"
           />
         </b-form-group>
 
@@ -89,9 +91,13 @@
 <script>
 export default {
   props: {
-    editingRoute: { type: Object, default: () => null },
+    editingItem: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
+    // TODO fetch sectors list from backend
     return {
       gradesFr: [
         "3a",
@@ -143,65 +149,42 @@ export default {
         "Il nido a sinistra",
         "Di Giacomo",
       ],
-      form: {
-        name: this.editingRoute?.name || "Tredici",
-        sector: this.editingRoute?.sector || "",
-        french: this.editingRoute?.hasGrade?.french || "",
-        link:
-          this.editingRoute?.link ||
-          "https://www.falesiaonline.it/settorefoto/329/gommamania-e-abside.html",
-        city: this.editingRoute?.city || "Vecchiano",
-      },
     };
+  },
+  computed: {
+    form() {
+      return this.editingItem
+        ? this.editingItem
+        : {
+            name: "",
+            sector: "",
+            hasGrade: { french: "" },
+            link: "",
+            city: "",
+          };
+    },
   },
   methods: {
     onSubmit() {
-      if (this.editingRoute) {
-        this.$axios
-          .$patch(
-            `/api/v1/climbing-routes/${this.editingRoute.id}`,
-            this.form,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${this.$store.getters.accessToken}`,
-              },
-            }
-          )
-          .then((data) => {
-            this.$emit("updateById", this.editingRoute.id, {
-              ...data.result,
-              hasGrade: { french: this.form.french },
-            });
+      this.$axios
+        .$patch(`/api/v1/climbing-routes/${this.editingItem.id}`, this.form, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.$store.getters.accessToken}`,
+          },
+        })
+        .then((data) => {
+          this.$emit("updateItemById", this.editingItem.id, {
+            ...data.result,
+            hasGrade: { french: this.form.french },
           });
-      } else {
-        this.$axios
-          .$post("/api/v1/climbing-routes", this.form, {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${this.$store.getters.accessToken}`,
-            },
-          })
-          .then((data) => {
-            this.$emit("updateListItem", {
-              ...data.result,
-              hasGrade: { french: this.form.french },
-            });
-          });
-      }
-      this.$bvModal.hide("addClimbingRouteForm");
+        });
+
+      this.$bvModal.hide("climbingRouteEditForm");
     },
     onReset(event) {
       event.preventDefault();
-      this.$bvModal.hide("addClimbingRouteForm");
-      // Reset our form values
-      this.form = {
-        name: "",
-        sector: "",
-        grade: "",
-        link: "",
-        city: "",
-      };
+      this.$bvModal.hide("climbingRouteEditForm");
     },
   },
 };

@@ -1,6 +1,5 @@
 const { Model } = require('objection');
 const tableNames = require('../../constants/tableNames');
-const Media = require('../media/media.model');
 
 class Gallery extends Model {
   static get tableName () {
@@ -22,8 +21,8 @@ class Gallery extends Model {
           type: "integer",
           title: "The ID",
         },
-        ownerId: {
-          $id: "#/properties/ownerId",
+        userId: {
+          $id: "#/properties/userId",
           type: "integer",
           title: "The id of the user that is the owner",
         },
@@ -32,12 +31,12 @@ class Gallery extends Model {
           type: "integer",
           title: "The id of the media used for the thumbnail",
         },
-        brand: {
+        title: {
           $id: "#/properties/title",
           type: "string",
           title: "The title of the Gallery",
         },
-        color: {
+        subtitle: {
           $id: "#/properties/subtitle",
           type: "string",
           title: "The subtitle of the Gallery",
@@ -60,8 +59,11 @@ class Gallery extends Model {
   }
 
   static get relationMappings () {
+    const User = require('../users/users.model');
+    const Media = require('../media/media.model');
+
     return {
-      hasMedia: {
+      galleryMedia: {
         relation: Model.ManyToManyRelation,
         modelClass: Media,
         join: {
@@ -79,6 +81,14 @@ class Gallery extends Model {
         join: {
           from: `${tableNames.gallery}.thumbnailId`,
           to: `${tableNames.media}.id`,
+        },
+      },
+      owner: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: `${tableNames.gallery}.userId`,
+          to: `${tableNames.user}.id`,
         },
       },
     };

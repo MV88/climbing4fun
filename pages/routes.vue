@@ -19,11 +19,11 @@
         </ul>
       </b-row>
 
-      <ClimbingRoutesForm
-        :editing-route="editingRoute"
+      <ClimbingRoutesEditForm
+        :editing-item="editingItem"
         @updateItemById="updateItemById"
-        @updateListItem="updateListItem"
       />
+      <ClimbingRoutesAddForm @updateListItem="updateListItem" />
     </b-container>
     <div class="right-sidebar">
       <div class="right-column">
@@ -43,7 +43,7 @@ export default {
     return {
       climbingRoutes: [],
       routeId: null,
-      editingRoute: null,
+      editingItem: null,
     };
   },
   computed: {
@@ -63,12 +63,12 @@ export default {
       this.routeId = routeId;
     },
     addItem() {
-      this.editingRoute = null;
-      this.$bvModal.show("addClimbingRouteForm");
+      this.editingItem = null;
+      this.$bvModal.show("climbingRouteAddForm");
     },
     editItem(item) {
-      this.editingRoute = item;
-      this.$bvModal.show("addClimbingRouteForm");
+      this.editingItem = item;
+      this.$bvModal.show("climbingRouteEditForm");
     },
     async deleteItemById(id) {
       await this.$axios.$delete(`/api/v1/climbing-routes/${id}`, {

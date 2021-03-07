@@ -7,10 +7,10 @@ const Gallery = require('./galleries.model');
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/", checkAuth, async (req, res, next) => {
   try {
     const galleries = await Gallery.query()
-      .withGraphFetched('hasMedia(getMedia)')
+      .withGraphFetched('galleryMedia(getMedia)')
       .select("*")
       .modifiers({
         getMedia (builder) {
@@ -37,38 +37,40 @@ router.get("/:id", async (req, res, next) => {
     next(e);
   }
 });
-router.post("/", checkAuth, upload.single("thumbnail"), async (req, res, next) => {
+router.post("/", checkAuth, upload.single("thumbnail"), /* upload.array("images"), */ async (req, res, next) => {
   try {
-    const rope = req.body;
+    const gallery = req.body;
     const url = `/${req.file.filename}`;
 
-    const media = {
-      name: `${rope.brand} ${rope.color}`,
+    const thumbnail = {
+      name: `${gallery.title}`,
       url,
       mimeType: req.file.mimetype,
       description: req.file.filename,
     };
-    // const mediaCreated = await Media.query().insert(media);
+    /*
+    const media = req.files.map(media => ({
+      name: `${media.filename}`,
+      url,
+      mimeType: media.mimetype,
+      description: media.filename,
+    }));
+    const mediaCreated = await Gallery.query().insert(media);
+    */
 
-    if (rope.purchaseDate === "") {
-      delete rope.purchaseDate;
-    }
-
-    if (rope.owner === "yes") {
-      rope.ownerId = req.userData.id;
-      rope.owner = "";
-    } else {
-      rope.owner = rope.ownerName;
-    }
-    delete rope.ownerName;
-    const ropeCreated = await Gallery.query().insertGraph({
-      ...rope,
-      hasThumbnail: [{
-        ...media,
-      }],
+    const galleryCreated = await Gallery.query().insertGraph({
+      ...gallery,
+      userId: req.userData.id,
+      hasThumbnail: {
+        ...thumbnail,
+      },
+      /* galleryMedia: [mediaCreated.map(({ id }) => ({
+        mediaId: id,
+      })),
+      ], */
     });
-    ropeCreated.url = url;
-    res.status(200).json({ result: { rope: ropeCreated }, message: "Rope inserted correctly" });
+    galleryCreated.thumbnail = url;
+    res.status(200).json({ result: { gallery: galleryCreated }, message: "Gallery inserted correctly" });
   } catch (e) {
     next(e);
   }
