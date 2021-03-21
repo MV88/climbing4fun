@@ -2,7 +2,7 @@ export default {
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
   ssr: false,
   server: {
-    host: "https://climbing4funbackend.herokuapp.com/",
+    host: "localhost",
   },
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
@@ -54,7 +54,7 @@ export default {
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
     credentials: true,
-    baseURL: "https://climbing4funbackend.herokuapp.com/", // Used as fallback if no runtime config is provided
+    baseURL: "http://localhost:5050", // Used as fallback if no runtime config is provided
   },
 
   // Content module configuration (https://go.nuxtjs.dev/config-content)
