@@ -7,12 +7,18 @@
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "seed": "knex seed:run",
+    "mp": "knex migrate:latest --env=production",
+    "rp": "knex migrate:rollback --env=production",
+    "sp": "knex seed:run --env=production",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "test": "jest --detectOpenHandles"
   },
-  "keywords": [],
-  "author": "",
+  "engines": {
+    "node": "14.x"
+  },
+  "keywords": ["climbing", "falesia", "climbers"],
+  "author": "Matteo Velludini chronosoutoftime@gmail.com",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.0",

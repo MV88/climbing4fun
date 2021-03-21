@@ -1,7 +1,8 @@
+// TODO remove this fixed token
 export const state = () => ({
   user: {
     accessToken:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IkNocm9ub3MiLCJ1c2VybmFtZSI6IkNocm9ub3MiLCJpYXQiOjE2MTMwODM2NzcsImV4cCI6MTYyMjA4MzY3N30.NJ08HIx483aJ7sSgnPI_5K1d-qDv4f--WqDjj5J0d5s",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IkNocm9ub3MiLCJ1c2VybmFtZSI6IkNocm9ub3MiLCJpYXQiOjE2MTM2ODYzNDgsImV4cCI6MTYyMjY4NjM0OH0.PBO-e4NO3Ek_Bq7AvmzZC7wSkAb04lFvp2PWS52e9tc",
     accessTokenExpiry: null,
   },
   auth: {

@@ -1,7 +1,10 @@
 {
   "name": "climbing4fun",
+  "description": "A website used for tracking progress and attempts on climbing routes",
   "version": "1.0.0",
   "private": true,
+  "keywords": ["climbing", "falesia", "climbers"],
+  "author": "Matteo Velludini chronosoutoftime@gmail.com",
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",

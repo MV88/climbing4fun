@@ -33,4 +33,24 @@ module.exports = {
       directory: `./src/db/seeds`,
     },
   },
+  production: {
+    debug: true,
+    client: "pg",
+    connection: {
+      database: process.env.POSTGRES_DB_PROD,
+      user: process.env.POSTGRES_USER_PROD,
+      password: process.env.POSTGRES_PASSWORD_PROD,
+      port: process.env.POSTGRES_PORT_PROD,
+      host: process.env.POSTGRES_HOST_PROD,
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    },
+    migrations: {
+      directory: `./src/db/migrations`,
+    },
+    seeds: {
+      directory: `./src/db/seeds`,
+    },
+  },
 };
