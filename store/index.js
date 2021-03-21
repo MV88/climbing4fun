@@ -2,7 +2,7 @@
 export const state = () => ({
   user: {
     accessToken:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IkNocm9ub3MiLCJ1c2VybmFtZSI6IkNocm9ub3MiLCJpYXQiOjE2MTYzNDg4OTIsImV4cCI6MTYyNTM0ODg5Mn0.J1P8s6YFGLq0eQzzyQS4lIqr1DqTqUVmwdVDkrj9xcU",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IkNocm9ub3MiLCJ1c2VybmFtZSI6IkNocm9ub3MiLCJpYXQiOjE2MTYzNTI0MDIsImV4cCI6MTYyNTM1MjQwMn0.aWiTi3auIYSlnlLPMbn4Jvl47XR6kS3gO0MJF8UU8a4",
     accessTokenExpiry: null,
   },
   auth: {
