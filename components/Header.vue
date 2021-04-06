@@ -48,8 +48,13 @@
 </template>
 
 <script>
+import UserForm from "./auth/UserForm.vue";
+
 export default {
   name: "Header",
+  components: {
+    UserForm,
+  },
   data() {
     return {
       userFormKey: 1,

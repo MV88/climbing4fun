@@ -91,6 +91,7 @@ import { mapState } from "vuex";
 import * as yup from "yup";
 
 export default {
+  name: "UserForm",
   data() {
     // TODO remove this values
     return {

@@ -19,10 +19,7 @@
         </ul>
       </b-row>
 
-      <ClimbingRoutesEditForm
-        :editing-item="editingItem"
-        @updateItemById="updateItemById"
-      />
+      <ClimbingRoutesEditForm @updateItemById="updateItemById" />
       <ClimbingRoutesAddForm @updateListItem="updateListItem" />
     </b-container>
     <div class="right-sidebar">
@@ -43,7 +40,6 @@ export default {
     return {
       climbingRoutes: [],
       routeId: null,
-      editingItem: null,
     };
   },
   computed: {
@@ -63,11 +59,11 @@ export default {
       this.routeId = routeId;
     },
     addItem() {
-      this.editingItem = null;
+      this.$store.commit("setEditingItem", null);
       this.$bvModal.show("climbingRouteAddForm");
     },
     editItem(item) {
-      this.editingItem = item;
+      this.$store.commit("setEditingItem", { ...item });
       this.$bvModal.show("climbingRouteEditForm");
     },
     async deleteItemById(id) {

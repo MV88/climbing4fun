@@ -7,7 +7,9 @@
         </h3>
       </div>
       <b-row class="jc-c">
-        <Trip v-if="selected" :item="selected" />
+        <div v-if="selected">
+          <Trip :item="selected" @getData="getData()" />
+        </div>
         <div v-for="item in galleries" v-else :key="item.id">
           <b-card :title="item.title" tag="article" @click="setSelected(item)">
             <img :width="size" :height="size" :src="item.hasThumbnail.url" />
@@ -26,9 +28,6 @@
         <b-btn v-if="selected" @click="clearSelected">
           <b-icon icon="arrow-left" scale="1" />
         </b-btn>
-        <b-btn v-if="selected">
-          <b-icon icon="pencil" scale="1" />
-        </b-btn>
         <b-btn
           v-if="selected"
           id="deleteGallery"
@@ -40,7 +39,7 @@
           :show="showDelete"
           target="deleteGallery"
           triggers="click"
-          title="Click on Delete if you are sure"
+          title="Erase gallery by clicking on Delete"
         >
           <b-btn @click="showDeletePopover(null)">Cancel</b-btn>
           <b-btn variant="danger" @click="deleteItemById(selected.id)"
@@ -54,8 +53,14 @@
 </template>
 
 <script>
+import find from "lodash/find";
+import Trip from "../components/gallery/Trip.vue";
+
 export default {
   name: "Gallery",
+  components: {
+    Trip,
+  },
   data() {
     return {
       size: 200,
@@ -77,6 +82,9 @@ export default {
         },
       });
       this.galleries = galleries.data.result;
+      if (this.selected && find(this.galleries, { id: this.selected.id })) {
+        this.selected = find(this.galleries, { id: this.selected.id });
+      }
     },
     setSelected(item) {
       this.selected = item;
@@ -121,7 +129,6 @@ export default {
   justify-content: flex-start;
 }
 .card {
-  width: 300px;
   margin: 16px;
   border: 1px solid grey;
 }

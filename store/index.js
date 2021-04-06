@@ -8,6 +8,7 @@ export const state = () => ({
   auth: {
     alreadyUsed: [],
   },
+  editingItem: null,
 });
 
 export const mutations = {
@@ -16,6 +17,12 @@ export const mutations = {
   },
   setUserErrors(state, auth) {
     state.auth = auth;
+  },
+  setEditingItem(state, item) {
+    state.editingItem = item;
+  },
+  updateEditingItem(state, { prop, value }) {
+    state.editingItem[prop] = value;
   },
   resetServerErrors(state, name) {
     /* eslint-disable */
@@ -29,4 +36,5 @@ export const mutations = {
 export const getters = {
   isLoggedIn: (state) => true || !!state.user.accessToken, // TODO restore this
   accessToken: (state) => state.user.accessToken,
+  editingItem: (state) => state.editingItem,
 };
