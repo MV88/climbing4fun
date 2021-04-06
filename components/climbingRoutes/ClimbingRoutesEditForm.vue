@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!!form">
     <b-modal id="climbingRouteEditForm" title="Climbing Route Form" hide-footer>
       <b-form @submit.prevent="onSubmit" @reset="onReset">
         <b-form-group
@@ -10,12 +10,13 @@
         >
           <b-form-input
             id="input-name"
-            v-model="form.name"
+            :value="form.name"
             :state="!!form.name"
             type="text"
             trim
             placeholder="Enter Name"
             required
+            @input="(value) => onUpdate('name', value)"
           />
         </b-form-group>
         <b-form-group
@@ -25,12 +26,14 @@
           description=""
         >
           <b-form-select
-            v-model="form.hasGrade.french"
+            id="input-grade"
+            :value="form.hasGrade.french"
             :state="!!form.hasGrade.french"
             :options="gradesFr"
             required
             trim
             placeholder="Enter Grade"
+            @input="(value) => onUpdate('hasGrade:', { french: value })"
           />
         </b-form-group>
         <b-form-group
@@ -41,11 +44,12 @@
         >
           <b-form-input
             id="input-sector"
-            v-model="form.sector"
+            :value="form.sector"
             :state="!!form.sector"
             list="input-sector-list"
             placeholder="Enter Sector"
             required
+            @input="(value) => onUpdate('sector', value)"
           />
 
           <datalist id="input-sector-list">
@@ -62,9 +66,10 @@
         >
           <b-form-input
             id="input-link"
-            v-model="form.link"
+            :value="form.link"
             type="text"
             placeholder="Enter Link to the route or sector"
+            @input="(value) => onUpdate('link', value)"
           />
         </b-form-group>
         <b-form-group
@@ -75,9 +80,10 @@
         >
           <b-form-input
             id="input-city"
-            v-model="form.city"
+            :value="form.city"
             type="text"
             placeholder="Enter City of the climbing route"
+            @input="(value) => onUpdate('city', value)"
           />
         </b-form-group>
 
@@ -90,12 +96,6 @@
 
 <script>
 export default {
-  props: {
-    editingItem: {
-      type: Object,
-      default: () => {},
-    },
-  },
   data() {
     // TODO fetch sectors list from backend
     return {
@@ -153,31 +153,38 @@ export default {
   },
   computed: {
     form() {
-      return this.editingItem
-        ? this.editingItem
-        : {
-            name: "",
-            sector: "",
-            hasGrade: { french: "" },
-            link: "",
-            city: "",
-          };
+      return (
+        this.$store.getters.editingItem || {
+          name: "",
+          city: "",
+          hasGrade: { french: "" },
+          sector: "",
+          link: "",
+        }
+      );
     },
   },
   methods: {
+    onUpdate(prop, value) {
+      console.log(prop + " '" + value + "'");
+      this.$store.commit("updateEditingItem", { prop, value });
+    },
     onSubmit() {
       this.$axios
-        .$patch(`/api/v1/climbing-routes/${this.editingItem.id}`, this.form, {
+        .$patch(`/api/v1/climbing-routes/${this.form.id}`, this.form, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${this.$store.getters.accessToken}`,
           },
         })
         .then((data) => {
-          this.$emit("updateItemById", this.editingItem.id, {
+          this.$emit("updateItemById", this.form.id, {
             ...data.result,
             hasGrade: { french: this.form.french },
           });
+        })
+        .catch((e) => {
+          console.error(e);
         });
 
       this.$bvModal.hide("climbingRouteEditForm");

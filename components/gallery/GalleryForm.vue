@@ -173,7 +173,7 @@ export default {
         this.$axios
           .$post("/api/v1/galleries", formData, {
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "multipart/form-data",
               Authorization: `Bearer ${this.$store.getters.accessToken}`,
             },
           })
