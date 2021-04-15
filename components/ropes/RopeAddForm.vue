@@ -158,24 +158,23 @@
 </template>
 
 <script>
+const defaultValues = {
+  owner: "yes",
+  ownerName: "",
+  brand: "",
+  color: "",
+  length: "",
+  shopLink: "",
+  thickness: "",
+  thumbnail: null,
+  purchaseDate: "",
+};
+
 export default {
-  props: {
-    editingItem: { type: Object, default: () => null },
-  },
   data() {
     return {
       previewImageSrc: "",
-      form: {
-        owner: this.editingItem?.owner || "yes",
-        ownerName: this.editingItem?.ownerName || "",
-        brand: this.editingItem?.brand || "",
-        color: this.editingItem?.color || "",
-        length: this.editingItem?.length || "",
-        shopLink: this.editingItem?.shopLink || "",
-        thickness: this.editingItem?.thickness || "",
-        thumbnail: this.editingItem?.thumbnail || null,
-        purchaseDate: this.editingItem?.purchaseDate || "",
-      },
+      form: defaultValues,
     };
   },
   methods: {
@@ -189,54 +188,33 @@ export default {
       formData.append("length", this.form.length);
       formData.append("shopLink", this.form.shopLink);
       formData.append("thickness", this.form.thickness);
-      formData.append(
-        "thumbnail",
-        this.form.thumbnail,
-        this.form.thumbnail.name
-      );
+      if (this.form.thumbnail) {
+        // TODO evaluate if we need to make this a required field
+        formData.append(
+          "thumbnail",
+          this.form.thumbnail,
+          this.form.thumbnail.name
+        );
+      }
       formData.append("purchaseDate", this.form.purchaseDate);
 
-      if (this.editingItem) {
-        this.$axios
-          .$patch(`/api/v1/ropes/${this.editingItem.id}`, this.form, {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${this.$store.getters.accessToken}`,
-            },
-          })
-          .then((data) => {
-            this.$emit("updateItemById", this.editingItem.id, {
-              ...data.result,
-              hasGrade: { french: this.form.french },
-            });
-          });
-      } else {
-        this.$axios
-          .$post("/api/v1/ropes", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${this.$store.getters.accessToken}`,
-            },
-          })
-          .then((data) => {
-            this.$emit("updateListItem", data.result.rope);
-          });
-      }
+      this.$axios
+        .$post("/api/v1/ropes", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${this.$store.getters.accessToken}`,
+          },
+        })
+        .then((data) => {
+          this.$emit("updateListItem", data.result.rope);
+        });
       this.$bvModal.hide("addRopeForm");
     },
     onReset(event) {
       event.preventDefault();
       this.$bvModal.hide("addRopeForm");
       // Reset our form values
-      this.form.brand = "";
-      this.form.owner = "yes";
-      this.form.ownerName = "";
-      this.form.thumbnail = null;
-      this.form.color = "";
-      this.form.length = "";
-      this.form.shopLink = "";
-      this.form.thickness = "";
-      this.form.purchaseDate = "";
+      this.form = { ...defaultValues };
       this.previewImageSrc = "";
     },
     pickFile() {
@@ -259,36 +237,4 @@ export default {
 };
 </script>
 
-<style>
-.carousel-container {
-  max-width: 1024px;
-  width: 100%;
-}
-.imagePreview {
-  height: 120px;
-  width: 120px;
-  background-size: contain;
-  background-position: center center;
-  margin: 0 5px 5px 0;
-}
-.cancelBtn {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-.imagePreviewWrapper {
-  min-height: 130px;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  margin: 0 auto 30px;
-  align-items: center;
-  position: relative;
-  justify-content: center;
-  margin: auto;
-  background-size: cover;
-  background-position: center center;
-}
-</style>
+<style></style>

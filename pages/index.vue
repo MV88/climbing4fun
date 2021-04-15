@@ -10,7 +10,6 @@ export default {};
 
 <style>
 #__nuxt {
-  width: 70%;
   margin: auto;
 }
 .container {

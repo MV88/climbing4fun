@@ -166,7 +166,6 @@ export default {
   },
   methods: {
     onUpdate(prop, value) {
-      console.log(prop + " '" + value + "'");
       this.$store.commit("updateEditingItem", { prop, value });
     },
     onSubmit() {
