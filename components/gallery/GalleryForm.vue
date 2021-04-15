@@ -56,35 +56,6 @@
             </div>
           </div>
         </b-form-group>
-        <!-- b-form-group>
-          <div>
-            <b-form-file
-              ref="images"
-              v-model="form.images"
-              accept="image/*"
-              multiple
-              :state="form.images.length >= 1"
-              placeholder="Choose or Drop images for the gallery here..."
-              drop-placeholder="Drop images for the gallery here..."
-              @input="pickImages"
-            />
-          </div>
-          <div class="imagePreviewWrapper">
-            <div v-if="form.images.length" class="flex-container preview">
-              <div
-                v-for="img in imagesSrc"
-                :key="img"
-                class="imagePreview"
-                :style="{ 'background-image': `url(${img})` }"
-              ></div>
-              <b-btn class="cancelBtn" @click="clearImages">X</b-btn>
-            </div>
-            <div v-else>
-              <label> Preview image </label>
-              <label> Best(125px x 125px) </label>
-            </div>
-          </div>
-        </b-form-group -->
         <b-button type="reset">Cancel</b-button>
         <b-button type="submit" variant="primary">Submit</b-button>
       </b-form>
@@ -100,7 +71,6 @@ export default {
   data() {
     return {
       form: {
-        images: this.editingItem?.images || [],
         thumbnail: this.editingItem?.thumbnail || [],
         title: this.editingItem?.title || "",
         subtitle: this.editingItem?.subtitle || "",
@@ -126,7 +96,6 @@ export default {
       }
     },
     clearImages() {
-      this.form.images = [];
       this.imagesSrc = "";
     },
     pickImages() {
@@ -142,7 +111,7 @@ export default {
     },
     onSubmit() {
       if (this.editingItem) {
-        /* this.$axios
+        this.$axios
           .$patch(`/api/v1/galleries/${this.editingItem.id}`, this.form, {
             headers: {
               "Content-Type": "application/json",
@@ -154,7 +123,7 @@ export default {
               ...data.result,
               hasGrade: { french: this.form.french },
             });
-          }); */
+          });
       } else {
         const formData = new FormData();
         formData.append("title", this.form.title);
@@ -164,12 +133,6 @@ export default {
           this.form.thumbnail,
           this.form.thumbnail.name
         );
-        /* formData.append(
-          "images",
-          this.form.images,
-          this.form.images.name
-        ); */
-
         this.$axios
           .$post("/api/v1/galleries", formData, {
             headers: {

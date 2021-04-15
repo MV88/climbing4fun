@@ -23,5 +23,6 @@ module.exports = {
         html: { normal: "never", void: "always" },
       },
     ],
+    "no-console": "off",
   },
 };

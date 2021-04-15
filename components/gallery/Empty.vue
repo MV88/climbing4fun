@@ -1,5 +1,5 @@
 <template>
-  <b-card>
+  <b-card tag="article" class="picture-card empty">
     <b-form-file
       ref="files"
       v-model="files"
@@ -14,7 +14,6 @@
     <template #footer>
       <small v-if="filesSrc.length === 0">
         Use this box to add new media
-        <b-btn id="clear" @click.stop="clearFiles()"> Cancel </b-btn>
       </small>
       <div v-else>
         <b-btn id="clear" @click.stop="clearFiles()"> Cancel </b-btn>
@@ -45,7 +44,7 @@ export default {
         reader.onload = (e) => {
           this.filesSrc.push(e.target.result);
           if (input.files.length === this.filesSrc.length) {
-            // this.files = [];
+            this.files = [];
             this.$emit("updateFilesSrc", this.filesSrc);
           }
         };
@@ -77,5 +76,8 @@ export default {
   margin: auto;
   display: flex;
   align-items: center;
+}
+.picture-card.empty .card-footer {
+  height: 63px;
 }
 </style>

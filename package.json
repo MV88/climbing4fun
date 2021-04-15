@@ -36,7 +36,9 @@
     "http": "0.0.1-security",
     "less": "^3.12.2",
     "less-loader": "^7.1.0",
+    "lodash": "^4.17.21",
     "nuxt": "^2.14.6",
+    "object-assign": "^4.1.1",
     "vue-picture-input": "^2.1.6",
     "vue-upload-image": "^1.1.5",
     "yup": "^0.32.8"

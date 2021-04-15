@@ -1,4 +1,5 @@
-// TODO remove this fixed token
+import get from "lodash/get";
+
 export const state = () => ({
   user: {
     accessToken:
@@ -9,27 +10,44 @@ export const state = () => ({
     alreadyUsed: [],
   },
   editingItem: null,
+  show: {
+    delete: {},
+  },
+  resources: {},
 });
 
 export const mutations = {
   setUser(state, { user }) {
-    state.user = user;
+    state.user = { ...user };
   },
   setUserErrors(state, auth) {
-    state.auth = auth;
+    state.auth = { ...auth };
+  },
+  setResources(state, { name, resources }) {
+    state.resources = { ...state.resources, [name]: [...resources] };
   },
   setEditingItem(state, item) {
-    state.editingItem = item;
+    state.editingItem = { ...item };
   },
   updateEditingItem(state, { prop, value }) {
-    state.editingItem[prop] = value;
+    state.editingItem = {
+      ...state.editingItem,
+      [prop]: value,
+    };
+  },
+  setShowDeleteFlag(state, { path, value }) {
+    state.show = {
+      ...state.show,
+      delete: {
+        ...state.show.delete,
+        [path]: value,
+      },
+    };
   },
   resetServerErrors(state, name) {
-    /* eslint-disable */
-    state.auth.alreadyUsed = state.auth.alreadyUsed.filter(
-      (item) => item !== name
-    );
-    /* eslint-enable */
+    state.auth.alreadyUsed = [
+      ...state.auth.alreadyUsed.filter((item) => item !== name),
+    ];
   },
 };
 
@@ -37,4 +55,13 @@ export const getters = {
   isLoggedIn: (state) => true || !!state.user.accessToken, // TODO restore this
   accessToken: (state) => state.user.accessToken,
   editingItem: (state) => state.editingItem,
+  getShowDeleteGalleryById: (state) => state.show.delete.galleryById,
+  getResources: (state) => state.resources,
+  getResourcesAttempts: (state) => state.resources.attempts || [],
+  getResourcesStyles: (state) => state.resources.styles || [],
+  getResourcesGalleries: (state) => state.resources.galleries || [],
+  getResourcesRopes: (state) => state.resources.ropes || [],
+  getResourcesRoutes: (state) => state.resources.routes || [],
+  getShowDeleteFlag: (state) => (path) =>
+    get(state, `show.delete.${path}`, false),
 };

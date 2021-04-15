@@ -1,63 +1,92 @@
 <template>
-  <div class="flex-container" @click="showPopoverById(null)">
-    <b-container>
-      <AttemptsTable
-        v-if="isLoggedIn"
-        :show-id="attemptId"
-        :items="attempts"
-        @updateRouteId="showPopoverById"
-        @addClimbingRoute="addClimbingRoute"
-        @editRoute="editRoute"
-        @deleteRouteById="deleteRouteById"
-      />
-
-      <ClimbingRoutesForm
-        :editing-route="editingRoute"
-        @updateById="updateById"
-        @update="update"
-      />
-    </b-container>
-    <div class="right-sidebar">
-      <div class="right-column">
-        <b-btn @click="addClimbingRoute">
-          <b-icon icon="plus" scale="1.5" />
-        </b-btn>
-      </div>
+  <b-container>
+    <div>
+      Click here to
+      <b-btn @click="addAttempt"> add an attempt </b-btn>
     </div>
-  </div>
+    <AttemptsTable v-if="isLoggedIn" :attempts="attempts" />
+
+    <AttemptsAddForm
+      :ropes="ropes"
+      :styles="styles"
+      :routes="routes"
+      @updateListItem="updateListItem"
+    />
+  </b-container>
 </template>
 
 <script>
-import findIndex from "lodash/findIndex";
+// import findIndex from "lodash/findIndex";
+import AttemptsAddForm from "../components/attempts/AttemptsAddForm.vue";
+
 export default {
   name: "Attempts",
-  data() {
-    return {
-      climbingRoutes: [],
-      routeId: null,
-      editingRoute: null,
-    };
+  components: {
+    AttemptsAddForm,
   },
   computed: {
     isLoggedIn() {
       return this.$store.getters.isLoggedIn;
+    },
+    attempts() {
+      return this.$store.getters.getResourcesAttempts;
+    },
+    routes() {
+      return this.$store.getters.getResourcesRoutes;
+    },
+    ropes() {
+      return this.$store.getters.getResourcesRopes;
+    },
+    styles() {
+      return this.$store.getters.getResourcesStyles;
     },
   },
   mounted() {
     this.getData();
   },
   methods: {
+    addAttempt() {
+      this.$store.commit("setEditingItem", null);
+      this.$bvModal.show("attemptAddForm");
+    },
     async getData() {
-      const routes = await this.$axios.$get("api/v1/climbing-routes");
-      this.climbingRoutes = routes.result;
+      if (this.attempts.length === 0) {
+        const attempts = await this.$axios.$get("api/v1/attempts");
+        this.$store.commit("setResources", {
+          name: "attempts",
+          resources: attempts.result,
+        });
+      }
+      if (this.routes.length === 0) {
+        const routes = await this.$axios.$get("api/v1/climbing-routes");
+        this.$store.commit("setResources", {
+          name: "routes",
+          resources: routes.result,
+        });
+      }
+      if (this.ropes.length === 0) {
+        const ropes = await this.$axios.$get("api/v1/ropes");
+        this.$store.commit("setResources", {
+          name: "ropes",
+          resources: ropes.result,
+        });
+      }
+      if (this.styles.length === 0) {
+        const styles = await this.$axios.$get("api/v1/styles");
+        this.$store.commit("setResources", {
+          name: "styles",
+          resources: styles.result,
+        });
+      }
     },
-    showPopoverById(routeId) {
-      this.routeId = routeId;
+    async updateListItem() {
+      const attempts = await this.$axios.$get("api/v1/attempts");
+      this.$store.commit("setResources", {
+        name: "attempts",
+        resources: attempts.result,
+      });
     },
-    addClimbingRoute() {
-      this.editingRoute = null;
-      this.$bvModal.show("addClimbingRouteForm");
-    },
+    /*
     editRoute(route) {
       this.editingRoute = route;
       this.$bvModal.show("addClimbingRouteForm");
@@ -71,16 +100,13 @@ export default {
       });
       this.getData();
     },
-    update(item) {
-      this.climbingRoutes.push(item);
-    },
     updateById(id, item) {
       this.climbingRoutes.splice(
         findIndex(this.climbingRoutes, { id }),
         1,
         item
       );
-    },
+    }, */
   },
 };
 </script>

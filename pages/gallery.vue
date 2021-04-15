@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-container" @click="showDeletePopover(null)">
+  <div class="flex-container" @click.stop="setShowDeleteGalleryById(null)">
     <b-container>
       <div class="ta-c">
         <h3 class="title">
@@ -8,6 +8,11 @@
       </div>
       <b-row class="jc-c">
         <div v-if="selected">
+          <p>
+            Welcome, in this gallery you can add images or video of your special
+            moments. <br />Share the gallery with your friends using your
+            favourite social network
+          </p>
           <Trip :item="selected" @getData="getData()" />
         </div>
         <div v-for="item in galleries" v-else :key="item.id">
@@ -16,36 +21,46 @@
             <b-card-text>
               {{ item.subtitle }}
             </b-card-text>
+            <template #footer>
+              <div>
+                <b-btn @click.stop="editItem(item)">
+                  <b-icon icon="pencil" scale="0.75" />
+                </b-btn>
+                <b-btn
+                  :id="'deleteGallery' + item.id"
+                  @click.stop="setShowDeleteGalleryById(item.id)"
+                >
+                  <b-icon icon="trash" scale="1" />
+                </b-btn>
+                <b-popover
+                  :show="showDeleteGalleryById === item.id"
+                  :target="'deleteGallery' + item.id"
+                  triggers="click"
+                  title="Erase gallery by clicking on Delete"
+                >
+                  <b-btn @click.stop="setShowDeleteGalleryById(null)"
+                    >Cancel</b-btn
+                  >
+                  <b-btn
+                    variant="danger"
+                    @click.stop="deleteItemById(selected.id)"
+                    >Delete</b-btn
+                  >
+                </b-popover>
+              </div>
+            </template>
           </b-card>
         </div>
       </b-row>
     </b-container>
     <div class="right-sidebar">
       <div class="right-column">
-        <b-btn @click="showForm">
+        <b-btn v-if="!selected" @click="showForm">
           <b-icon icon="plus" scale="1.5" />
         </b-btn>
-        <b-btn v-if="selected" @click="clearSelected">
+        <b-btn v-else @click="clearSelected">
           <b-icon icon="arrow-left" scale="1" />
         </b-btn>
-        <b-btn
-          v-if="selected"
-          id="deleteGallery"
-          @click.stop="showDeletePopover(selected)"
-        >
-          <b-icon icon="trash" scale="1" />
-        </b-btn>
-        <b-popover
-          :show="showDelete"
-          target="deleteGallery"
-          triggers="click"
-          title="Erase gallery by clicking on Delete"
-        >
-          <b-btn @click="showDeletePopover(null)">Cancel</b-btn>
-          <b-btn variant="danger" @click="deleteItemById(selected.id)"
-            >Delete</b-btn
-          >
-        </b-popover>
       </div>
     </div>
     <GalleryForm :editing-item="selected" @updateListItem="updateListItem" />
@@ -66,10 +81,13 @@ export default {
       size: 200,
       galleries: [],
       selected: null,
-      showDelete: false,
     };
   },
-  computed: {},
+  computed: {
+    showDeleteGalleryById() {
+      return this.$store.getters.getShowDeleteGalleryById;
+    },
+  },
   mounted() {
     this.getData();
   },
@@ -87,7 +105,16 @@ export default {
       }
     },
     setSelected(item) {
-      this.selected = item;
+      this.selected = {
+        ...item,
+        galleryMedia: [
+          ...item.galleryMedia,
+          ...item.galleryMedia,
+          ...item.galleryMedia,
+          ...item.galleryMedia,
+          ...item.galleryMedia,
+        ],
+      };
     },
     clearSelected(item) {
       this.selected = null;
@@ -98,8 +125,12 @@ export default {
     updateListItem(item) {
       this.galleries.push(item.gallery);
     },
-    showDeletePopover(selected) {
-      this.showDelete = !!selected;
+    setShowDeleteGalleryById(id) {
+      console.log("showDeleteGalleryById", this.showDeleteGalleryById);
+      this.$store.commit("setShowDeleteFlag", {
+        path: "galleryById",
+        value: id,
+      });
     },
     async deleteItemById(id) {
       await this.$axios.$delete(`/api/v1/galleries/${id}`, {

@@ -1,6 +1,41 @@
 <template>
   <div class="trip flex-container" @click="showDeletePopover(null)">
-    <b-row class="jc-c">
+    <b-row class="jc-c pictures">
+      <Empty @updateFilesSrc="updateFilesSrc" @saveFiles="saveFiles" />
+      <b-card
+        v-for="(src, idx) in filesSrc"
+        :key="src + idx"
+        tag="article"
+        class="picture-card temporary"
+      >
+        <img :width="size" :height="size" :src="src" />
+        <template #footer>
+          <b-btn :id="'editTempItem' + idx" @click.stop="">
+            todo
+            <b-icon icon="pencil" scale="1" />
+          </b-btn>
+          <b-btn
+            :id="'clearTempItem' + idx"
+            @click.stop="
+              showDeleteTempPopover(idx);
+              showDeletePopover(null);
+            "
+          >
+            <b-icon icon="trash" scale="1" />
+          </b-btn>
+          <b-popover
+            :show="showDeleteTemp === idx"
+            :target="'clearTempItem' + idx"
+            triggers="click"
+            :title="'Click on Delete if you are sure'"
+          >
+            <b-btn @click="showDeleteTempPopover(null)">Cancel</b-btn>
+            <b-btn variant="danger" @click="showDeleteTempPopover(null)"
+              >Delete</b-btn
+            >
+          </b-popover>
+        </template>
+      </b-card>
       <b-card
         v-for="(picture, index) in item.galleryMedia"
         :key="picture.url + index"
@@ -11,6 +46,7 @@
         <template #footer>
           <b-btn :id="'editItem' + index" @click.stop="">
             <b-icon icon="pencil" scale="1" />
+            todo
           </b-btn>
           <b-btn
             :id="'deleteItem' + index"
@@ -39,40 +75,6 @@
           </b-popover>
         </template>
       </b-card>
-      <b-card
-        v-for="(src, idx) in filesSrc"
-        :key="src + idx"
-        tag="article"
-        class="picture-card temporary"
-      >
-        <img :width="size" :height="size" :src="src" />
-        <template #footer>
-          <b-btn :id="'editTempItem' + idx" @click.stop="">
-            <b-icon icon="pencil" scale="1" />
-          </b-btn>
-          <b-btn
-            :id="'clearTempItem' + idx"
-            @click.stop="
-              showDeleteTempPopover(idx);
-              showDeletePopover(null);
-            "
-          >
-            <b-icon icon="trash" scale="1" />
-          </b-btn>
-          <b-popover
-            :show="showDeleteTemp === idx"
-            :target="'clearTempItem' + idx"
-            triggers="click"
-            :title="'Click on Delete if you are sure'"
-          >
-            <b-btn @click="showDeleteTempPopover(null)">Cancel</b-btn>
-            <b-btn variant="danger" @click="showDeleteTempPopover(null)"
-              >Delete</b-btn
-            >
-          </b-popover>
-        </template>
-      </b-card>
-      <Empty @updateFilesSrc="updateFilesSrc" @saveFiles="saveFiles" />
     </b-row>
   </div>
 </template>
@@ -108,10 +110,9 @@ export default {
       files.forEach((file) => {
         formData.append("files", file, file.name);
       });
-      // TODO fix files passed to request
       await this.$axios.$patch(`/api/v1/galleries/${this.item.id}`, formData, {
         headers: {
-          "Content-Type": "multipart/form-data", // TODO check this sicne i'mve sending form data
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${this.$store.getters.accessToken}`,
         },
       });
@@ -152,5 +153,9 @@ export default {
 
 .card.picture-card.temporary {
   border: 1px solid blue;
+}
+.pictures {
+  overflow: auto;
+  max-height: 650px;
 }
 </style>

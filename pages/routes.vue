@@ -79,6 +79,7 @@ export default {
       this.climbingRoutes.push(item);
     },
     updateItemById(id, item) {
+      this.$store.commit("setEditingItem", null);
       this.climbingRoutes.splice(
         findIndex(this.climbingRoutes, { id }),
         1,
