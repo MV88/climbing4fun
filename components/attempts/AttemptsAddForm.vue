@@ -10,8 +10,8 @@
         >
           <b-form-select
             id="input-rope"
-            :value="form.ropeId"
-            :state="!!form.ropeId"
+            :value="form.ropeId || firstRope"
+            :state="!!form.ropeId || !!firstRope"
             required
             trim
             placeholder="Select Rope"
@@ -129,8 +129,7 @@
             :value="form.climbingDate"
             :state="
               !!form.climbingDate &&
-              new Date(form.climbingDate) <
-                new Date().setDate(new Date().getDate() + 1)
+              new Date(form.climbingDate).getDate() < new Date().getDate() + 1
             "
             :start-weekday="1"
             placeholder="Choose a date"
@@ -147,7 +146,8 @@
         <b-button
           type="submit"
           :disabled="
-            !form.climbingDate || new Date(form.climbingDate) > new Date()
+            !form.climbingDate ||
+            new Date(form.climbingDate).getDate() > new Date().getDate()
           "
           variant="primary"
           >Submit</b-button
@@ -180,15 +180,14 @@ export default {
         ropeId: null,
         styleId: null,
         tries: 1,
-        climbingDate: null,
+        climbingDate: new Date(),
       },
     };
   },
-  mounted() {
-    if (this.ropes.length === 1) {
-      this.ropeId = this.ropes[0].id;
-    }
-    this.$bvModal.show("attemptAddForm");
+  computed: {
+    firstRope() {
+      return this.ropes?.[0]?.id;
+    },
   },
   methods: {
     getSpaces(num) {
@@ -199,12 +198,19 @@ export default {
     },
     onSubmit() {
       this.$axios
-        .$post("/api/v1/attempts", this.form, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.$store.getters.accessToken}`,
+        .$post(
+          "/api/v1/attempts",
+          {
+            ...this.form,
+            ropeId: this.form.ropeId || this.firstRope,
           },
-        })
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${this.$store.getters.accessToken}`,
+            },
+          }
+        )
         .then((data) => {
           this.$emit("updateListItem", {
             ...data.result,

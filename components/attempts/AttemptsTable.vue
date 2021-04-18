@@ -15,7 +15,13 @@
       {{ data.item.hasRoute.hasGrade.french }}
     </template>
     <template #cell(date)="data">
-      {{ data.item.climbingDate }}
+      {{
+        `${new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(
+          new Date(data.item.climbingDate)
+        )} ${new Date(data.item.climbingDate).getDate()}/${
+          new Date(data.item.climbingDate).getMonth() + 1
+        }/${new Date(data.item.climbingDate).getFullYear()}`
+      }}
     </template>
     <template #cell(style)="data">
       {{ data.item.hasStyle.name }}
@@ -52,6 +58,7 @@
 
 <script>
 export default {
+  name: "AttemptsTable",
   props: {
     attempts: {
       type: Array,
@@ -68,8 +75,27 @@ export default {
     showPopoverById(id) {
       this.itemId = id;
     },
-    editItem(id) {
-      console.log("todo");
+    editItem(item) {
+      this.$store.commit("setEditingItem", {
+        ...item,
+        styleId: item.hasStyle.id,
+        routeId: item.hasRoute.id,
+        ropeId: item.hasRope.id,
+      });
+      this.$bvModal.show("attemptEditForm");
+    },
+    async deleteItemById(id) {
+      await this.$axios.$delete(`/api/v1/attempts/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.$store.getters.accessToken}`,
+        },
+      });
+      const attempts = await this.$axios.$get("api/v1/attempts");
+      this.$store.commit("setResources", {
+        name: "attempts",
+        resources: attempts.result,
+      });
     },
   },
 };

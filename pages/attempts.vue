@@ -1,28 +1,54 @@
 <template>
   <b-container>
     <div>
-      Click here to
-      <b-btn @click="addAttempt"> add an attempt </b-btn>
+      <p>
+        This section is used as a tracker of your results when climbing in
+        Falesia. You can:
+      </p>
+      <ul>
+        <li>Add new attempts</li>
+        <li>Edit or Remove existing attempts</li>
+        <li>Filter and search attempts</li>
+      </ul>
     </div>
-    <AttemptsTable v-if="isLoggedIn" :attempts="attempts" />
-
     <AttemptsAddForm
       :ropes="ropes"
       :styles="styles"
       :routes="routes"
       @updateListItem="updateListItem"
     />
+    <AttemptsEditForm
+      :ropes="ropes"
+      :styles="styles"
+      :routes="routes"
+      @updateListItem="updateListItem"
+    />
+    <div v-if="width > 700">
+      Click here to
+      <b-btn @click="addAttempt"> add an attempt </b-btn>
+      <AttemptsTable v-if="isLoggedIn" :attempts="attempts" />
+    </div>
+
+    <AttemptsCards v-else :attempts="attempts" />
   </b-container>
 </template>
 
 <script>
-// import findIndex from "lodash/findIndex";
 import AttemptsAddForm from "../components/attempts/AttemptsAddForm.vue";
+import AttemptsEditForm from "../components/attempts/AttemptsEditForm.vue";
+import AttemptsCards from "../components/attempts/AttemptsCards.vue";
 
 export default {
   name: "Attempts",
   components: {
     AttemptsAddForm,
+    AttemptsCards,
+    AttemptsEditForm,
+  },
+  data() {
+    return {
+      width: window.innerWidth,
+    };
   },
   computed: {
     isLoggedIn() {
@@ -86,27 +112,6 @@ export default {
         resources: attempts.result,
       });
     },
-    /*
-    editRoute(route) {
-      this.editingRoute = route;
-      this.$bvModal.show("addClimbingRouteForm");
-    },
-    async deleteRouteById(routeId) {
-      await this.$axios.$delete(`/api/v1/climbing-routes/${routeId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.$store.getters.accessToken}`,
-        },
-      });
-      this.getData();
-    },
-    updateById(id, item) {
-      this.climbingRoutes.splice(
-        findIndex(this.climbingRoutes, { id }),
-        1,
-        item
-      );
-    }, */
   },
 };
 </script>
