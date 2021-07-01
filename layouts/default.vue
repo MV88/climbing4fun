@@ -1,8 +1,12 @@
 <template>
-  <div>
-    <Header />
-    <Nuxt />
-    <Footer />
+  <div class="wrapper">
+    <div class="header-wrapper">
+      <Header />
+    </div>
+    <div class="body-wrapper">
+      <Nuxt />
+      <Footer />
+    </div>
   </div>
 </template>
 <script>

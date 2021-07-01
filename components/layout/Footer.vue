@@ -1,5 +1,11 @@
 <template>
-  <b-navbar class="footer" toggleable="lg" type="dark" variant="info">
+  <b-navbar
+    class="footer"
+    toggleable="lg"
+    type="dark"
+    variant="info"
+    :fixed="bottom"
+  >
     <Discord />
     <Author />
     <Donate />
@@ -17,6 +23,11 @@ export default {
     Discord,
     Author,
     Donate,
+  },
+  data() {
+    return {
+      bottom: window.innerWidth > 1024 ? "bottom" : "",
+    };
   },
   computed: {
     discord() {
