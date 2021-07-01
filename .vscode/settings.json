@@ -13,7 +13,10 @@
     "titleBar.activeBackground": "#926c87",
     "titleBar.activeForeground": "#e7e7e7",
     "titleBar.inactiveBackground": "#926c8799",
-    "titleBar.inactiveForeground": "#e7e7e799"
+    "titleBar.inactiveForeground": "#e7e7e799",
+    "tab.activeBorder": "#a8899f",
+    "statusBar.border": "#926c87",
+    "titleBar.border": "#926c87"
   },
   "peacock.color": "#926c87",
   "vetur.validation.template": false,

@@ -14,6 +14,10 @@ export const state = () => ({
     delete: {},
   },
   resources: {},
+  generic: {
+    discord:
+      "https://discord.com/channels/760625029930156042/802638566017859584",
+  },
 });
 
 export const mutations = {
@@ -62,6 +66,7 @@ export const getters = {
   getResourcesGalleries: (state) => state.resources.galleries || [],
   getResourcesRopes: (state) => state.resources.ropes || [],
   getResourcesRoutes: (state) => state.resources.routes || [],
+  discord: (state) => state.generic.discord,
   getShowDeleteFlag: (state) => (path) =>
     get(state, `show.delete.${path}`, false),
 };

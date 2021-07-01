@@ -1,38 +1,30 @@
 <template>
-  <b-row class="jc-c spaced">
+  <div class="jc-c spaced routes-cards">
     <Empty />
 
     <b-card
-      v-for="item in attempts"
+      v-for="item in routes"
       :key="item.id"
       tag="article"
-      class="attempt-card"
+      class="route-card"
     >
       <div class="info-block">
-        <span class="info"><strong>grade(style)</strong></span>
-        <span>{{
-          `${item.hasRoute.hasGrade.french} (${item.hasStyle.name})`
-        }}</span>
+        <span class="info"><strong>Name</strong></span>
+        <span>{{ `${item.name}` }}</span>
       </div>
       <div class="info-block">
-        <span class="info"><strong>name</strong></span>
-        <span>{{ `${item.hasRoute.name}` }}</span>
+        <span class="info"><strong>Sector</strong></span>
+        <span
+          ><a :href="item.link" target="_blank">{{ `${item.sector}` }}</a></span
+        >
       </div>
       <div class="info-block">
-        <span class="info"><strong>sector</strong></span>
-        <span>{{ `${item.hasRoute.sector}` }}</span>
+        <span class="info"><strong>Grade</strong></span>
+        <span>{{ `${item.hasGrade.french}` }}</span>
       </div>
       <div class="info-block">
-        <span class="info"><strong># tries</strong></span>
-        <span>{{ `${item.tries}` }}</span>
-      </div>
-      <div class="info-block">
-        <span class="info"><strong>date</strong></span>
-        <span>{{
-          `${new Date(item.climbingDate).getDate()}/${
-            new Date(item.climbingDate).getMonth() + 1
-          }/${new Date(item.climbingDate).getFullYear()}`
-        }}</span>
+        <span class="info"><strong>City</strong></span>
+        <span>{{ `${item.city}` }}</span>
       </div>
 
       <template #footer>
@@ -41,14 +33,14 @@
             <b-icon icon="pencil" scale="0.75" />
           </b-btn>
           <b-btn
-            :id="`${item.id}deleteAttempt`"
+            :id="`${item.id}deleteRoute`"
             @click.stop="showPopoverById(item.id)"
           >
             <b-icon icon="trash" scale="0.75"
           /></b-btn>
           <b-popover
             :show="itemId === item.id"
-            :target="`${item.id}deleteAttempt`"
+            :target="`${item.id}deleteRoute`"
             triggers="focus"
             title="Click on Delete if you are sure"
           >
@@ -60,19 +52,19 @@
         </div>
       </template>
     </b-card>
-  </b-row>
+  </div>
 </template>
 
 <script>
-import Empty from "./Empty.vue";
+import EmptyClimbingRoutes from "./EmptyClimbingRoutes.vue";
 
 export default {
-  name: "AttemptsCards",
+  name: "RoutesCards",
   components: {
-    Empty,
+    Empty: EmptyClimbingRoutes,
   },
   props: {
-    attempts: {
+    routes: {
       type: Array,
       default: () => [],
     },
@@ -89,23 +81,21 @@ export default {
     editItem(item) {
       this.$store.commit("setEditingItem", {
         ...item,
-        styleId: item.hasStyle.id,
-        routeId: item.hasRoute.id,
-        ropeId: item.hasRope.id,
+        gradeId: item.hasGrade.id,
       });
-      this.$bvModal.show("attemptEditForm");
+      this.$bvModal.show("climbingRouteEditForm");
     },
     async deleteItemById(id) {
-      await this.$axios.$delete(`/api/v1/attempts/${id}`, {
+      await this.$axios.$delete(`/api/v1/routes/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.$store.getters.accessToken}`,
         },
       });
-      const attempts = await this.$axios.$get("api/v1/attempts");
+      const routes = await this.$axios.$get("api/v1/routes");
       this.$store.commit("setResources", {
-        name: "attempts",
-        resources: attempts.result,
+        name: "routes",
+        resources: routes.result,
       });
     },
   },
@@ -113,24 +103,29 @@ export default {
 </script>
 
 <style>
-.attempt-card {
+.route-card {
   width: 100%;
   margin-bottom: 16px;
   border: 1px solid yellowgreen;
 }
-.attempt-card .info {
+.route-card .info {
   width: 94px;
 }
-.attempt-card .info-block {
+.route-card .info-block {
   display: flex;
 }
 .spaced {
   justify-content: space-evenly;
 }
 @media only screen and (min-width: 600px) {
-  .attempt-card {
+  .route-card {
     width: 330px;
     margin: 0px;
   }
+}
+.routes-cards {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
 }
 </style>

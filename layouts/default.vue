@@ -2,9 +2,20 @@
   <div>
     <Header />
     <Nuxt />
+    <Footer />
   </div>
 </template>
-
+<script>
+import Header from "../components/layout/Header.vue";
+import Footer from "../components/layout/Footer.vue";
+export default {
+  name: "ClimbinApp",
+  components: {
+    Header,
+    Footer,
+  },
+};
+</script>
 <style>
 html {
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",

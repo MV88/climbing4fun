@@ -1,5 +1,5 @@
 <template>
-  <div class="table-container">
+  <div class="table-container route">
     <h3>Climbing Routes</h3>
     <b-table striped hover :items="items" :fields="fields">
       <template #cell(link)="data">
@@ -22,7 +22,7 @@
           <b-popover
             :show="itemId === data.item.id"
             :target="`${data.item.id}delete`"
-            triggers="click"
+            triggers="focus"
             title="Click on Delete if you are sure"
           >
             <b-btn @click="showPopoverById(null)">Cancel</b-btn>
@@ -41,10 +41,10 @@ export default {
   name: "RouteTable",
   props: {
     items: { type: Array, default: () => [] },
-    itemId: { type: Number, default: null },
   },
   data() {
     return {
+      itemId: "",
       fields: [
         {
           key: "name",
@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     showPopoverById(id) {
-      this.$emit("showPopoverById", id);
+      this.itemId = id;
     },
     editItem(route) {
       this.$emit("editItem", route);
@@ -101,5 +101,12 @@ export default {
 }
 .inline h3 {
   margin-right: 8px;
+}
+.table-container.route {
+  height: 100%;
+  overflow: auto;
+  padding-right: 16px;
+  padding-top: 16px;
+  align-self: flex-start;
 }
 </style>

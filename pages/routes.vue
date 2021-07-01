@@ -1,45 +1,146 @@
 <template>
-  <div class="flex-container" @click="showPopoverById(null)">
-    <b-container>
+  <div class="flex-container routes" @click="showPopoverById(null)">
+    <b-container class="container-routes">
+      <div class="start-section">
+        <b-btn v-if="width > 600" @click="addItem">
+          add a climbing route
+        </b-btn>
+        <div class="filters-routes">
+          <h4>Filters</h4>
+          <ul class="sorters">
+            <li class="sort-filter">
+              Grade
+              <b-form-radio-group
+                v-if="isLoggedIn && width <= 600"
+                id="sorterGrade"
+                v-model="sortBy"
+                class="sortItem"
+                name="sorter"
+                @change="checkFilterSort()"
+              >
+                <b-form-radio v-model="sortBy" :value="ASC + 'grade'"
+                  >ASC</b-form-radio
+                >
+                <b-form-radio v-model="sortBy" :value="DESC + 'grade'"
+                  >DESC</b-form-radio
+                >
+              </b-form-radio-group>
+              <b-form-input
+                id="input-grade"
+                v-model="filters.grade"
+                type="text"
+                placeholder="Filter by Grade"
+                required
+                class="filterItem"
+                @input="checkFilterSort()"
+              />
+            </li>
+            <li class="sort-filter">
+              Sector
+              <b-form-radio-group
+                v-if="isLoggedIn && width <= 600"
+                id="sorterSector"
+                v-model="sortBy"
+                class="sortItem"
+                name="sorter"
+                @change="checkFilterSort()"
+              >
+                <b-form-radio v-model="sortBy" :value="ASC + 'sector'"
+                  >ASC</b-form-radio
+                >
+                <b-form-radio v-model="sortBy" :value="DESC + 'sector'"
+                  >DESC</b-form-radio
+                >
+              </b-form-radio-group>
+              <b-form-input
+                id="input-sector"
+                v-model="filters.sector"
+                type="text"
+                placeholder="Filter by Sector"
+                required
+                class="filterItem"
+                @input="checkFilterSort()"
+              />
+            </li>
+            <li class="sort-filter">
+              City
+              <b-form-radio-group
+                v-if="isLoggedIn && width <= 600"
+                id="sorterCity"
+                v-model="sortBy"
+                class="sortItem"
+                name="sorter"
+                @change="checkFilterSort()"
+              >
+                <b-form-radio v-model="sortBy" :value="ASC + 'city'"
+                  >ASC</b-form-radio
+                >
+                <b-form-radio v-model="sortBy" :value="DESC + 'city'"
+                  >DESC</b-form-radio
+                >
+              </b-form-radio-group>
+              <b-form-input
+                id="input-city"
+                v-model="filters.city"
+                type="text"
+                placeholder="Filter by City"
+                required
+                class="filterItem"
+                @input="checkFilterSort()"
+              />
+            </li>
+          </ul>
+        </div>
+      </div>
       <RouteTable
-        v-if="isLoggedIn"
+        v-if="isLoggedIn && width > 600"
         :item-id="routeId"
-        :items="climbingRoutes"
+        :items="climbingRoutesFiltered"
         @showPopoverById="showPopoverById"
         @updateItemById="updateItemById"
         @editItem="editItem"
         @deleteItemById="deleteItemById"
       />
-      <b-row>
-        <h4>TODO: Filters</h4>
-        <ul>
-          <li>By Grade</li>
-          <li>By Sector</li>
-          <li>By City</li>
-        </ul>
-      </b-row>
 
+      <ClimbingRoutesCards
+        v-if="width <= 600"
+        :routes="climbingRoutesFiltered"
+      />
       <ClimbingRoutesEditForm @updateItemById="updateItemById" />
       <ClimbingRoutesAddForm @updateListItem="updateListItem" />
     </b-container>
-    <div class="right-sidebar">
-      <div class="right-column">
-        <b-btn @click="addItem">
-          <b-icon icon="plus" scale="1.5" />
-        </b-btn>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 import findIndex from "lodash/findIndex";
+import sortBy from "lodash/sortBy";
+import reverse from "lodash/reverse";
+import RouteTable from "../components/climbingRoutes/RouteTable.vue";
+import ClimbingRoutesCards from "../components/climbingRoutes/ClimbingRoutesCards.vue";
+const ASC = "ASC";
+const DESC = "DESC";
+
 export default {
   name: "Routes",
+  components: {
+    RouteTable,
+    ClimbingRoutesCards,
+  },
   data() {
     return {
+      filters: {
+        grade: "",
+        sector: "",
+        city: "",
+      },
+      sortBy: "",
+      DESC,
+      ASC,
       climbingRoutes: [],
+      climbingRoutesFiltered: [],
       routeId: null,
+      width: window.innerWidth,
     };
   },
   computed: {
@@ -54,6 +155,49 @@ export default {
     async getData() {
       const routes = await this.$axios.$get("api/v1/climbing-routes");
       this.climbingRoutes = routes.result;
+      this.climbingRoutesFiltered = routes.result;
+    },
+    checkFilterSort() {
+      this.climbingRoutesFiltered = this.climbingRoutes.filter((item) => {
+        let grade = true;
+        let sector = true;
+        let city = true;
+        if (this.filters.grade) {
+          grade = item.hasGrade.french
+            .toLowerCase()
+            .includes(this.filters.grade.toLowerCase());
+        }
+        if (this.filters.sector) {
+          sector = item.sector
+            .toLowerCase()
+            .includes(this.filters.sector.toLowerCase());
+        }
+        if (this.filters.city) {
+          city = item.city
+            .toLowerCase()
+            .includes(this.filters.city.toLowerCase());
+        }
+        return grade && sector && city;
+      });
+
+      this.climbingRoutesFiltered = sortBy(
+        this.climbingRoutesFiltered,
+        (item) => {
+          if (this.sortBy.includes("grade")) {
+            return item.hasGrade.french.toLowerCase();
+          }
+          if (this.sortBy.includes("sector")) {
+            return item.sector.toLowerCase();
+          }
+          if (this.sortBy.includes("city")) {
+            return item.city.toLowerCase();
+          }
+          return item;
+        }
+      );
+      if (this.sortBy.includes(DESC)) {
+        this.climbingRoutesFiltered = reverse(this.climbingRoutesFiltered);
+      }
     },
     showPopoverById(routeId) {
       this.routeId = routeId;

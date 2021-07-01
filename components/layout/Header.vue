@@ -1,7 +1,7 @@
 <template>
-  <b-navbar sticky toggleable="lg" type="dark" variant="info">
+  <b-navbar class="header" toggleable="lg" type="dark" variant="info">
     <b-navbar-brand href="#">
-      <b-img src="../assets/Mediamodifier-Design.svg" height="36" />
+      <b-img src="../../assets/Mediamodifier-Design.svg" height="36" />
     </b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse" />
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import UserForm from "./auth/UserForm.vue";
+import UserForm from "../auth/UserForm.vue";
 
 export default {
   name: "Header",
@@ -81,5 +81,8 @@ export default {
 <style>
 .hide {
   display: none;
+}
+.header {
+  min-height: 60px;
 }
 </style>

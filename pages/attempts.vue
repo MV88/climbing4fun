@@ -1,36 +1,38 @@
 <template>
-  <b-container>
-    <div>
-      <p>
-        This section is used as a tracker of your results when climbing in
-        Falesia. You can:
-      </p>
-      <ul>
-        <li>Add new attempts</li>
-        <li>Edit or Remove existing attempts</li>
-        <li>Filter and search attempts</li>
-      </ul>
-    </div>
-    <AttemptsAddForm
-      :ropes="ropes"
-      :styles="styles"
-      :routes="routes"
-      @updateListItem="updateListItem"
-    />
-    <AttemptsEditForm
-      :ropes="ropes"
-      :styles="styles"
-      :routes="routes"
-      @updateListItem="updateListItem"
-    />
-    <div v-if="width > 700">
-      Click here to
-      <b-btn @click="addAttempt"> add an attempt </b-btn>
-      <AttemptsTable v-if="isLoggedIn" :attempts="attempts" />
-    </div>
+  <div class="flex-container">
+    <b-container>
+      <div>
+        <p>
+          This section is used as a tracker of your results when climbing in
+          Falesia. You can:
+        </p>
+        <ul>
+          <li>Add new attempts</li>
+          <li>Edit or Remove existing attempts</li>
+          <li>Filter and search attempts</li>
+        </ul>
+      </div>
+      <AttemptsAddForm
+        :ropes="ropes"
+        :styles="styles"
+        :routes="routes"
+        @updateListItem="updateListItem"
+      />
+      <AttemptsEditForm
+        :ropes="ropes"
+        :styles="styles"
+        :routes="routes"
+        @updateListItem="updateListItem"
+      />
+      <div v-if="width > 700">
+        Click here to
+        <b-btn @click="addAttempt"> add an attempt </b-btn>
+        <AttemptsTable v-if="isLoggedIn" :attempts="attempts" />
+      </div>
 
-    <AttemptsCards v-else :attempts="attempts" />
-  </b-container>
+      <AttemptsCards v-else :attempts="attempts" />
+    </b-container>
+  </div>
 </template>
 
 <script>

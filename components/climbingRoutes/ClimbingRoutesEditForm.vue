@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!!form">
+  <div v-if="!!form" class="outer-modal">
     <b-modal id="climbingRouteEditForm" title="Climbing Route Form" hide-footer>
       <b-form @submit.prevent="onSubmit" @reset="onReset">
         <b-form-group
@@ -180,7 +180,7 @@ export default {
         .then((data) => {
           this.$emit("updateItemById", this.form.id, {
             ...data.result,
-            hasGrade: { french: this.form.french },
+            hasGrade: { french: this.form.hasGrade.french },
           });
         })
         .catch((e) => {

@@ -1,6 +1,12 @@
 # climbing4fun
 Web App made in VueJS 3 track progress and pictures of my climbing journey
 
+## Frontend
+This repo covers the frontend part
+
+## Backend
+[This](https://github.com/MV88/climbing4fun_backend) repo covers the backend part which is a REST API with endpoints made purposely for this app
+
 ## Build Setup
 
 ```bash
