@@ -5,7 +5,9 @@
     </div>
     <div class="body-wrapper">
       <Nuxt />
-      <Footer />
+      <div class="footer-wrapper">
+        <Footer />
+      </div>
     </div>
   </div>
 </template>
@@ -67,5 +69,14 @@ html {
 .button--grey:hover {
   color: #fff;
   background-color: #35495e;
+}
+.body-wrapper {
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+.footer-wrapper {
+  width: 100%;
+  align-self: flex-end;
 }
 </style>

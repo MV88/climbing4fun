@@ -35,4 +35,10 @@ export default {
 .activities {
   text-align: left;
 }
+.home-container {
+  height: unset;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+}
 </style>

@@ -2,12 +2,9 @@
   margin: auto;
 }
 .container {
-  height: 100%;
   flex-direction: column;
-  margin: 0;
-  margin-left: auto;
+  margin: auto;
   display: flex;
-  position: absolute;
   padding: 0;
   justify-content: center;
   align-items: center;
@@ -45,12 +42,10 @@
 .table-root {
   width: 100%;
 }
-// .flex-container {
-//   height: 100%;
-//   overflow: auto;
-//   position: absolute;
-//   width: 100%;
-// }
+.flex-container {
+  overflow: auto;
+  width: 100%;
+}
 .right-column {
   display: flex;
   flex-direction: column;
@@ -87,7 +82,7 @@ body {
   .sort-filter {
     flex-flow: unset !important;
   }
-  .filterItem  {
+  .filterItem {
     width: unset;
   }
 }
@@ -101,21 +96,36 @@ body {
   .container-routes {
     flex-direction: row !important;
   }
-  .filterItem  {
+  .filterItem {
     width: 130px;
   }
 }
+html,
+body,
+#__nuxt,
+#__layout,
+.wrapper {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.body-wrapper {
+  height: ~"calc(100% - 60px)";
+  height: ~"-moz-calc(100% - 60px)";
+  height: ~"-webkit-calc(100% - 60px)";
+  overflow: auto;
+  width: 100%;
+}
 @media (min-width: 1025px) {
-  .filterItem  {
+  .filterItem {
     width: 200px;
   }
-  .body-wrapper{
-    height: calc(100% - 120px);
-    overflow: auto;
-    position: absolute;
-    width: 100%;
-  }
-  .table-container.route{
+  .table-container.route {
     overflow: auto;
   }
   body {
@@ -163,7 +173,6 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-
 }
 .sort-filter {
   margin: 4px 0px;

@@ -2,8 +2,8 @@
   <div class="table-container route">
     <h3>Climbing Routes</h3>
     <b-table striped hover :items="items" :fields="fields">
-      <template #cell(link)="data">
-        <a :href="data.value" target="_blank">link</a>
+      <template #cell(sector)="data">
+        <a :href="data.item.link" target="_blank">{{ data.value }}</a>
       </template>
       <template #cell(hasGrade)="data">
         {{ data.value.french }}
@@ -59,10 +59,6 @@ export default {
           key: "hasGrade",
           label: "Grade",
           sortable: true,
-        },
-        {
-          key: "link",
-          sortable: false,
         },
         {
           key: "city",

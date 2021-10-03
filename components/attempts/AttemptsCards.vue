@@ -1,5 +1,5 @@
 <template>
-  <b-row class="jc-c spaced">
+  <div class="jc-c spaced attempt-row">
     <Empty />
 
     <b-card
@@ -60,7 +60,7 @@
         </div>
       </template>
     </b-card>
-  </b-row>
+  </div>
 </template>
 
 <script>
@@ -132,5 +132,9 @@ export default {
     width: 330px;
     margin: 0px;
   }
+}
+.attempt-row {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>

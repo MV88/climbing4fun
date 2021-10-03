@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-container">
+  <div class="flex-container ropes">
     <b-container @click="showPopoverById(null)">
       <h3>Ropes</h3>
       <div>
@@ -95,7 +95,18 @@ export default {
         const ropes = await this.$axios.$get("api/v1/ropes");
         this.$store.commit("setResources", {
           name: "ropes",
-          resources: ropes.result,
+          resources: ropes.result
+            .concat(ropes.result)
+            .concat(ropes.result)
+            .concat(ropes.result)
+            .concat(ropes.result)
+            .concat(ropes.result)
+            .concat(ropes.result)
+            .concat(ropes.result)
+            .concat(ropes.result)
+            .concat(ropes.result)
+            .concat(ropes.result)
+            .concat(ropes.result),
         });
       }
     },

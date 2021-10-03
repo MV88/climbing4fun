@@ -82,7 +82,7 @@ export default {
         const attempts = await this.$axios.$get("api/v1/attempts");
         this.$store.commit("setResources", {
           name: "attempts",
-          resources: attempts.result,
+          resources: attempts.result.concat(attempts.result),
         });
       }
       if (this.routes.length === 0) {
