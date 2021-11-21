@@ -76,17 +76,19 @@ export const getters = {
     return Object.keys(usage).map((key) => ({ id: key, ...usage[key] }));
   },
   totalAttempts: (state, getters) => {
-    return getters.getResourcesAttempts.length;
+    return getters.getResourcesAttempts.reduce((sum, attempt) => {
+      return sum + attempt.tries;
+    }, 0);
   },
   counterGrades: (state, getters) => {
     const grades = {};
-    getters.getResourcesAttempts.forEach(({ hasRoute }) => {
+    getters.getResourcesAttempts.forEach(({ hasRoute, tries }) => {
       const id = hasRoute.hasGrade.french;
       const val = grades[id] && grades[id].value ? grades[id].value : 0;
       grades[id] = {};
       grades[id].name = hasRoute.name;
       grades[id].grade = hasRoute.hasGrade.french;
-      grades[id].value = val + 1;
+      grades[id].value = val + tries;
     });
     return Object.keys(grades).map((key) => ({ id: key, ...grades[key] }));
   },
