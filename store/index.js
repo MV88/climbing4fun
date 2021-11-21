@@ -62,6 +62,34 @@ export const getters = {
   getShowDeleteGalleryById: (state) => state.show.delete.galleryById,
   getResources: (state) => state.resources,
   getResourcesAttempts: (state) => state.resources.attempts || [],
+  getRopesUsage: (state, getters) => {
+    const usage = {};
+    getters.getResourcesAttempts.forEach(({ hasRope, tries }) => {
+      const val =
+        usage[hasRope.id] && usage[hasRope.id].value
+          ? usage[hasRope.id].value
+          : 0;
+      usage[hasRope.id] = {};
+      usage[hasRope.id].value = val + tries;
+      usage[hasRope.id].rope = hasRope;
+    });
+    return Object.keys(usage).map((key) => ({ id: key, ...usage[key] }));
+  },
+  totalAttempts: (state, getters) => {
+    return getters.getResourcesAttempts.length;
+  },
+  counterGrades: (state, getters) => {
+    const grades = {};
+    getters.getResourcesAttempts.forEach(({ hasRoute }) => {
+      const id = hasRoute.hasGrade.french;
+      const val = grades[id] && grades[id].value ? grades[id].value : 0;
+      grades[id] = {};
+      grades[id].name = hasRoute.name;
+      grades[id].grade = hasRoute.hasGrade.french;
+      grades[id].value = val + 1;
+    });
+    return Object.keys(grades).map((key) => ({ id: key, ...grades[key] }));
+  },
   getResourcesStyles: (state) => state.resources.styles || [],
   getResourcesGalleries: (state) => state.resources.galleries || [],
   getResourcesRopes: (state) => state.resources.ropes || [],
