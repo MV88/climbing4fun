@@ -1,10 +1,27 @@
 <template>
-  <div>
-    <Header />
-    <Nuxt />
+  <div class="wrapper">
+    <div class="header-wrapper">
+      <Header />
+    </div>
+    <div class="body-wrapper">
+      <Nuxt />
+      <div class="footer-wrapper">
+        <Footer />
+      </div>
+    </div>
   </div>
 </template>
-
+<script>
+import Header from "../components/layout/Header.vue";
+import Footer from "../components/layout/Footer.vue";
+export default {
+  name: "ClimbinApp",
+  components: {
+    Header,
+    Footer,
+  },
+};
+</script>
 <style>
 html {
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -52,5 +69,14 @@ html {
 .button--grey:hover {
   color: #fff;
   background-color: #35495e;
+}
+.body-wrapper {
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+.footer-wrapper {
+  width: 100%;
+  align-self: flex-end;
 }
 </style>

@@ -26,7 +26,7 @@
           <b-popover
             :show="showDeleteTemp === idx"
             :target="'clearTempItem' + idx"
-            triggers="click"
+            triggers="focus"
             :title="'Click on Delete if you are sure'"
           >
             <b-btn @click="showDeleteTempPopover(null)">Cancel</b-btn>
@@ -60,7 +60,7 @@
           <b-popover
             :show="showDelete === index"
             :target="'deleteItem' + index"
-            triggers="click"
+            triggers="focus"
             title="Click on Delete if you are sure"
           >
             <b-btn @click="showDeletePopover(null)">Cancel</b-btn>

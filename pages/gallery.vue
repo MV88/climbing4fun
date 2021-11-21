@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-container" @click.stop="setShowDeleteGalleryById(null)">
+  <div class="flex-container">
     <b-container>
       <div class="ta-c">
         <h3 class="title">
@@ -35,7 +35,7 @@
                 <b-popover
                   :show="showDeleteGalleryById === item.id"
                   :target="'deleteGallery' + item.id"
-                  triggers="click"
+                  triggers="focus"
                   title="Erase gallery by clicking on Delete"
                 >
                   <b-btn @click.stop="setShowDeleteGalleryById(null)"
@@ -78,15 +78,11 @@ export default {
   },
   data() {
     return {
+      showDeleteGalleryById: null,
       size: 200,
       galleries: [],
       selected: null,
     };
-  },
-  computed: {
-    showDeleteGalleryById() {
-      return this.$store.getters.getShowDeleteGalleryById;
-    },
   },
   mounted() {
     this.getData();
@@ -105,6 +101,8 @@ export default {
       }
     },
     setSelected(item) {
+      this.showDeleteGalleryById = null;
+
       this.selected = {
         ...item,
         galleryMedia: [
@@ -126,11 +124,7 @@ export default {
       this.galleries.push(item.gallery);
     },
     setShowDeleteGalleryById(id) {
-      console.log("showDeleteGalleryById", this.showDeleteGalleryById);
-      this.$store.commit("setShowDeleteFlag", {
-        path: "galleryById",
-        value: id,
-      });
+      this.showDeleteGalleryById = id;
     },
     async deleteItemById(id) {
       await this.$axios.$delete(`/api/v1/galleries/${id}`, {
@@ -145,43 +139,4 @@ export default {
 };
 </script>
 
-<style>
-.ta-c {
-  text-align: center;
-}
-.jc-c {
-  justify-content: center;
-}
-.title {
-  margin-top: 8px;
-}
-.start.container {
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-.card {
-  margin: 16px;
-  border: 1px solid grey;
-}
-img {
-  max-width: 100%;
-  object-fit: contain;
-}
-.card:hover {
-  border-color: rgb(39, 133, 216);
-  cursor: pointer;
-  transform: scale(1.1);
-}
-.card-link + .card-link {
-  margin-left: 0;
-}
-
-.btn-circle.btn {
-  width: 30px;
-  height: 30px;
-  padding: 0px;
-  border-radius: 15px;
-  font-size: 10px;
-  text-align: center;
-}
-</style>
+<style></style>

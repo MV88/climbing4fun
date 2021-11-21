@@ -13,11 +13,23 @@
     "titleBar.activeBackground": "#926c87",
     "titleBar.activeForeground": "#e7e7e7",
     "titleBar.inactiveBackground": "#926c8799",
-    "titleBar.inactiveForeground": "#e7e7e799"
+    "titleBar.inactiveForeground": "#e7e7e799",
+    "tab.activeBorder": "#a8899f",
+    "statusBar.border": "#926c87",
+    "titleBar.border": "#926c87",
+    "editorGroup.border": "#a8899f",
+    "panel.border": "#a8899f",
+    "sash.hoverBorder": "#a8899f",
+    "sideBar.border": "#a8899f",
+    "statusBarItem.remoteBackground": "#926c87",
+    "statusBarItem.remoteForeground": "#e7e7e7"
   },
   "peacock.color": "#926c87",
   "vetur.validation.template": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
+  },
+  "files.watcherExclude": {
+    "**/target": true
   }
 }

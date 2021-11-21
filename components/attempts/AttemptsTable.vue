@@ -43,7 +43,7 @@
         <b-popover
           :show="itemId === data.item.id"
           :target="`${data.item.id}deleteAttempt`"
-          triggers="click"
+          triggers="focus"
           title="Click on Delete if you are sure"
         >
           <b-btn @click="showPopoverById(null)">Cancel</b-btn>

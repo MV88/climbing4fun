@@ -3,7 +3,7 @@ import get from "lodash/get";
 export const state = () => ({
   user: {
     accessToken:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IkNocm9ub3MiLCJ1c2VybmFtZSI6IkNocm9ub3MiLCJpYXQiOjE2MTYzNTI0MDIsImV4cCI6MTYyNTM1MjQwMn0.aWiTi3auIYSlnlLPMbn4Jvl47XR6kS3gO0MJF8UU8a4",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IkNocm9ub3MiLCJ1c2VybmFtZSI6IkNocm9ub3MiLCJpYXQiOjE2MzcwOTM4MzUsImV4cCI6MTY0NjA5MzgzNX0.rFfG9Ne24402u1-93mmLgwvxSAkFBkdLnK8hbImiuwQ",
     accessTokenExpiry: null,
   },
   auth: {
@@ -14,6 +14,10 @@ export const state = () => ({
     delete: {},
   },
   resources: {},
+  generic: {
+    discord:
+      "https://discord.com/channels/760625029930156042/802638566017859584",
+  },
 });
 
 export const mutations = {
@@ -62,6 +66,7 @@ export const getters = {
   getResourcesGalleries: (state) => state.resources.galleries || [],
   getResourcesRopes: (state) => state.resources.ropes || [],
   getResourcesRoutes: (state) => state.resources.routes || [],
+  discord: (state) => state.generic.discord,
   getShowDeleteFlag: (state) => (path) =>
     get(state, `show.delete.${path}`, false),
 };
