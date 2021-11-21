@@ -23,6 +23,12 @@ module.exports = {
         html: { normal: "never", void: "always" },
       },
     ],
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "auto",
+      },
+    ],
     "no-console": "off",
   },
 };
