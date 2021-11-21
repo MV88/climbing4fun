@@ -16,7 +16,6 @@
                 v-model="sortBy"
                 class="sortItem"
                 name="sorter"
-                @change="checkFilterSort()"
               >
                 <b-form-radio v-model="sortBy" :value="ASC + 'grade'"
                   >ASC</b-form-radio
@@ -32,7 +31,6 @@
                 placeholder="Filter by Grade"
                 required
                 class="filterItem"
-                @input="checkFilterSort()"
               />
             </li>
             <li class="sort-filter">
@@ -43,7 +41,6 @@
                 v-model="sortBy"
                 class="sortItem"
                 name="sorter"
-                @change="checkFilterSort()"
               >
                 <b-form-radio v-model="sortBy" :value="ASC + 'sector'"
                   >ASC</b-form-radio
@@ -59,7 +56,6 @@
                 placeholder="Filter by Sector"
                 required
                 class="filterItem"
-                @input="checkFilterSort()"
               />
             </li>
             <li class="sort-filter">
@@ -70,7 +66,6 @@
                 v-model="sortBy"
                 class="sortItem"
                 name="sorter"
-                @change="checkFilterSort()"
               >
                 <b-form-radio v-model="sortBy" :value="ASC + 'city'"
                   >ASC</b-form-radio
@@ -86,7 +81,6 @@
                 placeholder="Filter by City"
                 required
                 class="filterItem"
-                @input="checkFilterSort()"
               />
             </li>
           </ul>
@@ -97,7 +91,6 @@
         :item-id="routeId"
         :items="climbingRoutesFiltered"
         @showPopoverById="showPopoverById"
-        @updateItemById="updateItemById"
         @editItem="editItem"
         @deleteItemById="deleteItemById"
       />
@@ -106,14 +99,13 @@
         v-if="width <= 600"
         :routes="climbingRoutesFiltered"
       />
-      <ClimbingRoutesEditForm @updateItemById="updateItemById" />
+      <ClimbingRoutesEditForm @updateListItem="updateListItem" />
       <ClimbingRoutesAddForm @updateListItem="updateListItem" />
     </b-container>
   </div>
 </template>
 
 <script>
-import findIndex from "lodash/findIndex";
 import sortBy from "lodash/sortBy";
 import reverse from "lodash/reverse";
 import RouteTable from "../components/climbingRoutes/RouteTable.vue";
@@ -137,13 +129,17 @@ export default {
       sortBy: "",
       DESC,
       ASC,
-      climbingRoutes: [],
-      climbingRoutesFiltered: [],
       routeId: null,
       width: window.innerWidth,
     };
   },
   computed: {
+    climbingRoutes() {
+      return this.$store.getters.getResourcesRoutes;
+    },
+    climbingRoutesFiltered() {
+      return this.checkFilterSort();
+    },
     isLoggedIn() {
       return this.$store.getters.isLoggedIn;
     },
@@ -154,11 +150,14 @@ export default {
   methods: {
     async getData() {
       const routes = await this.$axios.$get("api/v1/climbing-routes");
-      this.climbingRoutes = routes.result;
-      this.climbingRoutesFiltered = routes.result;
+      this.$store.commit("setResources", {
+        name: "routes",
+        resources: routes.result,
+      });
     },
+
     checkFilterSort() {
-      this.climbingRoutesFiltered = this.climbingRoutes.filter((item) => {
+      let climbingRoutesFiltered = this.climbingRoutes.filter((item) => {
         let grade = true;
         let sector = true;
         let city = true;
@@ -180,24 +179,22 @@ export default {
         return grade && sector && city;
       });
 
-      this.climbingRoutesFiltered = sortBy(
-        this.climbingRoutesFiltered,
-        (item) => {
-          if (this.sortBy.includes("grade")) {
-            return item.hasGrade.french.toLowerCase();
-          }
-          if (this.sortBy.includes("sector")) {
-            return item.sector.toLowerCase();
-          }
-          if (this.sortBy.includes("city")) {
-            return item.city.toLowerCase();
-          }
-          return item;
+      climbingRoutesFiltered = sortBy(climbingRoutesFiltered, (item) => {
+        if (this.sortBy.includes("grade")) {
+          return item.hasGrade.french.toLowerCase();
         }
-      );
+        if (this.sortBy.includes("sector")) {
+          return item.sector.toLowerCase();
+        }
+        if (this.sortBy.includes("city")) {
+          return item.city.toLowerCase();
+        }
+        return item;
+      });
       if (this.sortBy.includes(DESC)) {
-        this.climbingRoutesFiltered = reverse(this.climbingRoutesFiltered);
+        climbingRoutesFiltered = reverse(climbingRoutesFiltered);
       }
+      return climbingRoutesFiltered;
     },
     showPopoverById(routeId) {
       this.routeId = routeId;
@@ -219,16 +216,13 @@ export default {
       });
       this.getData();
     },
-    updateListItem(item) {
-      this.climbingRoutes.push(item);
-    },
-    updateItemById(id, item) {
+    async updateListItem() {
+      const routes = await this.$axios.$get("api/v1/climbing-routes");
       this.$store.commit("setEditingItem", null);
-      this.climbingRoutes.splice(
-        findIndex(this.climbingRoutes, { id }),
-        1,
-        item
-      );
+      this.$store.commit("setResources", {
+        name: "routes",
+        resources: routes.result,
+      });
     },
   },
 };

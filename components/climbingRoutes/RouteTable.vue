@@ -82,9 +82,6 @@ export default {
     editItem(route) {
       this.$emit("editItem", route);
     },
-    updateItemById(id) {
-      this.$emit("updateItemById", id);
-    },
     deleteItemById(id) {
       this.$emit("deleteItemById", id);
     },

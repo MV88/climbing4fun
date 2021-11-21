@@ -158,6 +158,13 @@
 </template>
 
 <script>
+const defaultValues = {
+  routeId: null,
+  ropeId: null,
+  styleId: null,
+  tries: 1,
+  climbingDate: new Date(),
+};
 export default {
   props: {
     ropes: {
@@ -175,13 +182,7 @@ export default {
   },
   data() {
     return {
-      form: {
-        routeId: null,
-        ropeId: null,
-        styleId: null,
-        tries: 1,
-        climbingDate: new Date(),
-      },
+      form: { ...defaultValues },
     };
   },
   computed: {
@@ -217,18 +218,13 @@ export default {
             hasGrade: { french: this.form.french },
           });
         });
+      this.form = { ...defaultValues };
       this.$bvModal.hide("attemptAddForm");
     },
     onReset(event) {
       event.preventDefault();
       this.$bvModal.hide("attemptAddForm");
-      this.form = {
-        name: "",
-        sector: "",
-        grade: "",
-        link: "",
-        city: "",
-      };
+      this.form = { ...defaultValues };
     },
   },
 };

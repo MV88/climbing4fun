@@ -174,7 +174,7 @@ export default {
   data() {
     return {
       previewImageSrc: "",
-      form: defaultValues,
+      form: { ...defaultValues },
     };
   },
   methods: {
@@ -206,8 +206,9 @@ export default {
           },
         })
         .then((data) => {
-          this.$emit("updateListItem", data.result.rope);
+          this.$emit("updateListItem");
         });
+      this.form = { ...defaultValues };
       this.$bvModal.hide("addRopeForm");
     },
     onReset(event) {

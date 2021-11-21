@@ -120,6 +120,33 @@ body,
   height: ~"-webkit-calc(100% - 60px)";
   overflow: auto;
   width: 100%;
+
+  .item-card {
+    width: 100%;
+    margin-bottom: 16px;
+    border: 1px solid yellowgreen;
+  }
+  .item-card .info {
+    width: 124px;
+    text-align: left;
+    margin-right: 8px;
+  }
+  .item-card .info-block {
+    display: flex;
+  }
+  .spaced {
+    justify-content: space-evenly;
+  }
+  @media only screen and (min-width: 600px) {
+    .item-card {
+      width: 330px;
+      margin: 0px;
+    }
+  }
+  .item-row {
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
 @media (min-width: 1025px) {
   .filterItem {

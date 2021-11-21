@@ -178,10 +178,7 @@ export default {
           },
         })
         .then((data) => {
-          this.$emit("updateItemById", this.form.id, {
-            ...data.result,
-            hasGrade: { french: this.form.hasGrade.french },
-          });
+          this.$emit("updateListItem");
         })
         .catch((e) => {
           console.error(e);

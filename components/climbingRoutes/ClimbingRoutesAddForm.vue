@@ -161,11 +161,15 @@ export default {
           },
         })
         .then((data) => {
-          this.$emit("updateListItem", {
-            ...data.result,
-            hasGrade: { french: this.form.french },
-          });
+          this.$emit("updateListItem");
         });
+      this.form = {
+        name: "",
+        sector: "",
+        french: "",
+        link: "",
+        city: "",
+      };
       this.$bvModal.hide("climbingRouteAddForm");
     },
     onReset(event) {
@@ -174,7 +178,7 @@ export default {
       this.form = {
         name: "",
         sector: "",
-        grade: "",
+        french: "",
         link: "",
         city: "",
       };

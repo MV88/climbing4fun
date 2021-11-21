@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal id="editRopeForm" title="Edit Rope Form" hide-footer>
+    <b-modal id="ropeEditForm" title="Edit Rope Form" hide-footer>
       <b-form @submit="onSubmit" @reset="onReset">
         <b-form-group
           v-slot="{ ariaDescribedby }"
@@ -220,14 +220,14 @@ export default {
           },
         })
         .then((data) => {
-          this.$emit("updateItemById", this.form.id, data.result);
+          this.$emit("updateListItem");
         });
 
-      this.$bvModal.hide("editRopeForm");
+      this.$bvModal.hide("ropeEditForm");
     },
     onReset(event) {
       event.preventDefault();
-      this.$bvModal.hide("editRopeForm");
+      this.$bvModal.hide("ropeEditForm");
       // Reset our form values
       this.form = { ...defaultValues };
     },

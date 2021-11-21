@@ -3,7 +3,7 @@ import get from "lodash/get";
 export const state = () => ({
   user: {
     accessToken:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IkNocm9ub3MiLCJ1c2VybmFtZSI6IkNocm9ub3MiLCJpYXQiOjE2MTYzNDg4OTIsImV4cCI6MTYyNTM0ODg5Mn0.J1P8s6YFGLq0eQzzyQS4lIqr1DqTqUVmwdVDkrj9xcU",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IkNocm9ub3MiLCJ1c2VybmFtZSI6IkNocm9ub3MiLCJpYXQiOjE2MzcwOTM4MzUsImV4cCI6MTY0NjA5MzgzNX0.rFfG9Ne24402u1-93mmLgwvxSAkFBkdLnK8hbImiuwQ",
     accessTokenExpiry: null,
   },
   auth: {

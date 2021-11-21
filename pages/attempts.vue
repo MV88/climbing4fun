@@ -39,6 +39,7 @@
 import AttemptsAddForm from "../components/attempts/AttemptsAddForm.vue";
 import AttemptsEditForm from "../components/attempts/AttemptsEditForm.vue";
 import AttemptsCards from "../components/attempts/AttemptsCards.vue";
+import AttemptsTable from "../components/attempts/AttemptsTable.vue";
 
 export default {
   name: "Attempts",
@@ -46,6 +47,7 @@ export default {
     AttemptsAddForm,
     AttemptsCards,
     AttemptsEditForm,
+    AttemptsTable,
   },
   data() {
     return {
@@ -82,7 +84,7 @@ export default {
         const attempts = await this.$axios.$get("api/v1/attempts");
         this.$store.commit("setResources", {
           name: "attempts",
-          resources: attempts.result.concat(attempts.result),
+          resources: attempts.result,
         });
       }
       if (this.routes.length === 0) {
